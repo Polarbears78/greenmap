@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🌿 그린맵 GreenMap - 육민관중학교</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f4f0; }
+.header { background: linear-gradient(135deg, #2d6a4f, #40916c); color: white; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.15); position: relative; z-index: 1000; }
+.header h1 { font-size: 18px; font-weight: 700; }
+.header .subtitle { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+.header .stats { text-align: right; font-size: 12px; }
+.header .stats .count { font-size: 20px; font-weight: 700; }
+.tab-bar { display: flex; background: white; border-bottom: 1px solid #e0e0e0; position: relative; z-index: 999; }
+.tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+.tab.active { color: #2d6a4f; border-bottom-color: #2d6a4f; }
+#map { height: calc(100vh - 200px); min-height: 400px; }
+.panel { display: none; height: calc(100vh - 200px); min-height: 400px; overflow-y: auto; padding: 16px; background: #f8faf8; }
+.panel.active { display: block; }
+.card { background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 4px solid #40916c; }
+.card .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.card .card-title { font-size: 15px; font-weight: 700; color: #1b4332; }
+.card .card-session { font-size: 11px; background: #d8f3dc; color: #2d6a4f; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+.card .card-meta { font-size: 12px; color: #888; margin-bottom: 6px; }
+.card .card-body { font-size: 13px; color: #444; line-height: 1.6; }
+.card .card-photo { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-top: 8px; background: #e8f0e8; display: flex; align-items: center; justify-content: center; color: #40916c; font-size: 13px; }
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.stat-box { background: white; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.stat-box .stat-num { font-size: 28px; font-weight: 800; color: #2d6a4f; }
+.stat-box .stat-label { font-size: 12px; color: #666; margin-top: 4px; }
+.session-progress { background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.session-progress .session-title { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px; }
+.progress-bar { height: 8px; background: #e8f0e8; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #40916c, #52b788); border-radius: 4px; transition: width 0.5s; }
+.progress-text { font-size: 11px; color: #888; margin-top: 4px; text-align: right; }
+.guide-step { background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); display: flex; gap: 12px; }
+.guide-num { width: 32px; height: 32px; background: #2d6a4f; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.guide-content h3 { font-size: 14px; font-weight: 700; color: #1b4332; margin-bottom: 4px; }
+.guide-content p { font-size: 12px; color: #555; line-height: 1.5; }
+.form-btn { display: block; background: linear-gradient(135deg, #2d6a4f, #40916c); color: white; text-align: center; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(45,106,79,0.3); }
+.form-btn:active { transform: scale(0.98); }
+.bottom-info { background: white; padding: 8px 16px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; }
+.leaflet-popup-content { font-size: 13px; line-height: 1.5; }
+.popup-title { font-weight: 700; color: #1b4332; font-size: 14px; margin-bottom: 4px; }
+.popup-meta { color: #888; font-size: 11px; margin-bottom: 6px; }
+.popup-body { color: #444; }
+.popup-photo-placeholder { width: 100%; height: 80px; background: #d8f3dc; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #40916c; font-size: 12px; margin-top: 6px; }
+.species-badge { display: inline-block; background: #d8f3dc; color: #2d6a4f; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; margin: 2px; }
+</style>
+</head>
+<body>
+<div class="header"><div><h1>🌿 그린맵 GreenMap</h1><div class="subtitle">육민관중학교 STEAM 동아리</div></div><div class="stats"><div class="count" id="totalCount">12</div><div>관찰 기록</div></div></div>
+<div class="tab-bar"><div class="tab active" onclick="showTab('map')">🗺️ 지도</div><div class="tab" onclick="showTab('list')">📋 기록</div><div class="tab" onclick="showTab('stats')">📊 현황</div><div class="tab" onclick="showTab('guide')">📖 안내</div></div>
+<div id="map"></div>
+<div id="list-panel" class="panel"></div>
+<div id="stats-panel" class="panel"><div class="stat-grid"><div class="stat-box"><div class="stat-num" id="statObservations">12</div><div class="stat-label">총 관찰 기록</div></div><div class="stat-box"><div class="stat-num" id="statSpecies">9</div><div class="stat-label">발견 식물 종</div></div><div class="stat-box"><div class="stat-num" id="statStudents">8</div><div class="stat-label">참여 학생</div></div><div class="stat-box"><div class="stat-num" id="statSessions">3</div><div class="stat-label">완료 차시</div></div></div><h3 style="font-size:14px;color:#1b4332;margin-bottom:10px;">📅 차시별 진행률</h3><div class="session-progress"><div class="session-title">1차시 — 학교 주변 식생 조사</div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div><div class="progress-text">5/5명 제출 완료</div></div><div class="session-progress"><div class="session-title">2차시 — 토양·수질 환경 측정</div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div><div class="progress-text">4/5명 제출</div></div><div class="session-progress"><div class="session-title">3차시 — 생태 지도 데이터 입력</div><div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div><div class="progress-text">3/5명 제출</div></div><div class="session-progress"><div class="session-title">4차시 — 외래종·자생종 분류</div><div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div><div class="progress-text">예정</div></div><h3 style="font-size:14px;color:#1b4332;margin:16px 0 10px;">🌱 발견 식물 목록</h3><div id="speciesList"></div></div>
+<div id="guide-panel" class="panel"><a href="#" class="form-btn" onclick="alert('구글 폼 URL을 여기에 연결하세요')">📝 이번 차시 과제 제출하기</a><h3 style="font-size:14px;color:#1b4332;margin-bottom:12px;">제출 방법 안내</h3><div class="guide-step"><div class="guide-num">1</div><div class="guide-content"><h3>현장에서 관찰하기</h3><p>학교 주변 또는 지정된 조사 구역에서 식물을 관찰합니다.</p></div></div><div class="guide-step"><div class="guide-num">2</div><div class="guide-content"><h3>사진 촬영하기</h3><p>식물의 전체 모습과 잎·꽃 등 특징이 보이도록 가까이에서 촬영합니다.</p></div></div><div class="guide-step"><div class="guide-num">3</div><div class="guide-content"><h3>구글 폼으로 제출</h3><p>위의 [과제 제출하기] 버튼을 누르면 구글 폼이 열립니다.</p></div></div><div class="guide-step"><div class="guide-num">4</div><div class="guide-content"><h3>지도에서 확인</h3><p>제출 후 [지도] 탭에서 내 기록이 표시되는지 확인합니다.</p></div></div><h3 style="font-size:14px;color:#1b4332;margin:16px 0 10px;">관찰 기록 작성 예시</h3><div class="card"><div class="card-header"><span class="card-title">🌸 철쭉 (Rhododendron)</span><span class="card-session">1차시</span></div><div class="card-meta">📍 학교 정문 화단 | 🧑‍🎓 김○○</div><div class="card-body">높이 약 1.2m, 분홍색 꽃이 만개 상태. 잎은 타원형으로 끝이 뾰족하며 가장자리가 매끄럽다.</div></div></div>
+<div class="bottom-info">2026 육민관중학교 STEAM 동아리 그린맵 | 데이터: 구글 시트 연동</div>
+<script>
+const sampleData=[{id:1,session:1,student:"김○○",date:"2026-05-10",lat:37.3077,lng:127.9209,species:"철쭉",scientificName:"Rhododendron schlippenbachii",observation:"높이 약 1.2m, 분홍색 꽃 만개. 잎은 타원형, 끝이 뾰족. 화단 가장자리에 5그루 나란히 식재.",location:"학교 정문 화단"},{id:2,session:1,student:"이○○",date:"2026-05-10",lat:37.3080,lng:127.9204,species:"소나무",scientificName:"Pinus densiflora",observation:"수고 약 8m, 수피는 붉은 갈색. 솔방울 다수 관찰. 수관 밀도 양호.",location:"학교 운동장 북쪽"},{id:3,session:1,student:"박○○",date:"2026-05-10",lat:37.3074,lng:127.9214,species:"개나리",scientificName:"Forsythia koreana",observation:"높이 약 2m, 꽃은 이미 낙화. 잎이 무성하게 나옴. 담장 따라 울타리 형태로 식재.",location:"학교 남쪽 담장"},{id:4,session:1,student:"정○○",date:"2026-05-10",lat:37.3082,lng:127.9219,species:"단풍나무",scientificName:"Acer palmatum",observation:"수고 약 5m. 잎은 손바닥 모양으로 5~7갈래. 현재 녹색, 가을 단풍 예상 지점으로 적합.",location:"학교 후문 인근"},{id:5,session:1,student:"최○○",date:"2026-05-10",lat:37.3072,lng:127.9207,species:"은행나무",scientificName:"Ginkgo biloba",observation:"수고 약 12m, 수령 추정 30년 이상. 부채꼴 잎이 특징적. 가로수로 식재.",location:"학교 앞 도로변"},{id:6,session:2,student:"김○○",date:"2026-05-17",lat:37.3075,lng:127.9211,species:"토끼풀",scientificName:"Trifolium repens",observation:"운동장 가장자리 잔디 사이에 군락. 흰색 꽃 개화 중. 토양 pH 6.2 측정.",location:"운동장 남서쪽 잔디"},{id:7,session:2,student:"이○○",date:"2026-05-17",lat:37.3084,lng:127.9217,species:"쑥",scientificName:"Artemisia princeps",observation:"높이 약 30cm, 특유의 향기. 학교 뒤편 빈 땅에 자생. 토양 습도 보통.",location:"학교 뒤편 공터"},{id:8,session:2,student:"박○○",date:"2026-05-17",lat:37.3070,lng:127.9201,species:"강아지풀",scientificName:"Setaria viridis",observation:"도로변 콘크리트 틈에서 생장. 이삭이 형성 중. 도시 환경 적응 사례로 기록.",location:"학교 앞 보도블록 틈"},{id:9,session:2,student:"정○○",date:"2026-05-17",lat:37.3078,lng:127.9224,species:"벚나무",scientificName:"Prunus serrulata",observation:"수고 약 6m, 열매(버찌) 형성 초기. 잎 가장자리 톱니 뚜렷. 진딧물 약간 관찰.",location:"학교 동쪽 주차장"},{id:10,session:3,student:"김○○",date:"2026-05-24",lat:37.3087,lng:127.9199,species:"질경이",scientificName:"Plantago asiatica",observation:"토양 다짐이 심한 곳에서도 생장. 로제트형 잎 배열. 답압 내성 식물로 생태 지표종 가능.",location:"학교 진입로 가장자리"},{id:11,session:3,student:"이○○",date:"2026-05-24",lat:37.3067,lng:127.9209,species:"명아주",scientificName:"Chenopodium album",observation:"높이 약 40cm, 잎 뒷면에 하얀 가루. 빈 공터에서 발견. 질소 부화 토양 지표식물.",location:"학교 남쪽 빈터"},{id:12,session:3,student:"최○○",date:"2026-05-24",lat:37.3081,lng:127.9197,species:"소나무",scientificName:"Pinus densiflora",observation:"수고 약 10m, 1차시 조사 소나무와 다른 개체. 솔잎혹파리 피해 흔적 관찰. 수세 약간 약화.",location:"학교 서쪽 언덕"}];
+const map=L.map('map').setView([37.3077,127.9209],17);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(map);
+const schoolIcon=L.divIcon({html:'🏫',className:'school-marker',iconSize:[30,30],iconAnchor:[15,15]});
+L.marker([37.3077,127.9209],{icon:schoolIcon}).addTo(map).bindPopup('<b>🏫 육민관중학교</b><br>STEAM 동아리 그린맵 본부');
+const sessionColors={1:'#2d6a4f',2:'#40916c',3:'#52b788',4:'#74c69d'};
+sampleData.forEach(d=>{const color=sessionColors[d.session]||'#95d5b2';const icon=L.divIcon({html:'<div style="background:'+color+';width:28px;height:28px;border-radius:50%;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;">🌱</div>',className:'',iconSize:[28,28],iconAnchor:[14,14]});L.marker([d.lat,d.lng],{icon:icon}).addTo(map).bindPopup('<div class="popup-title">🌿 '+d.species+'</div><div class="popup-meta"><i>'+d.scientificName+'</i></div><div class="popup-meta">📍 '+d.location+' | 🧑‍🎓 '+d.student+' | '+d.session+'차시</div><div class="popup-body">'+d.observation+'</div>',{maxWidth:280});});
+function renderList(){const panel=document.getElementById('list-panel');const sorted=[...sampleData].sort((a,b)=>b.id-a.id);panel.innerHTML=sorted.map(d=>'<div class="card" onclick="map.setView(['+d.lat+','+d.lng+'],19);showTab(\'map\');"><div class="card-header"><span class="card-title">🌿 '+d.species+'</span><span class="card-session">'+d.session+'차시</span></div><div class="card-meta">📍 '+d.location+' | 🧑‍🎓 '+d.student+' | 📅 '+d.date+'</div><div class="card-body">'+d.observation+'</div></div>').join('');}
+renderList();
+function renderSpecies(){const sm={};sampleData.forEach(d=>{if(!sm[d.species])sm[d.species]={name:d.scientificName,count:0};sm[d.species].count++;});document.getElementById('speciesList').innerHTML=Object.entries(sm).sort((a,b)=>b[1].count-a[1].count).map(([n,info])=>'<span class="species-badge">'+n+' ('+info.count+')</span>').join(' ');}
+renderSpecies();
+function showTab(name){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));const tabs=document.querySelectorAll('.tab');const tabMap={map:0,list:1,stats:2,guide:3};tabs[tabMap[name]].classList.add('active');if(name==='map'){document.getElementById('map').style.display='block';map.invalidateSize();}else{document.getElementById('map').style.display='none';document.getElementById(name+'-panel').classList.add('active');}}
+const SHEET_URL='https://docs.google.com/spreadsheets/d/1ETBlzzmzEYOOYja9P6BvIuiIbHZfCeYezwPGseCZMwc/gviz/tq?tqx=out:json';
+async function loadFromSheet(){try{const res=await fetch(SHEET_URL);const text=await res.text();const json=JSON.parse(text.substring(47).slice(0,-2));const rows=json.table.rows;const data=rows.map((row,i)=>({id:i+1,session:parseInt(row.c[0]?.v)||1,student:row.c[1]?.v||'',date:row.c[2]?.v||'',lat:parseFloat(row.c[3]?.v)||0,lng:parseFloat(row.c[4]?.v)||0,species:row.c[5]?.v||'',scientificName:row.c[6]?.v||'',observation:row.c[7]?.v||'',location:row.c[8]?.v||''}));return data;}catch(e){console.error('시트 로드 실패:',e);return sampleData;}}
+const markerLayer=L.layerGroup().addTo(map);
+function refreshMap(data){markerLayer.clearLayers();data.forEach(d=>{const color=sessionColors[d.session]||'#95d5b2';const icon=L.divIcon({html:'<div style="background:'+color+';width:28px;height:28px;border-radius:50%;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;">🌱</div>',className:'',iconSize:[28,28],iconAnchor:[14,14]});L.marker([d.lat,d.lng],{icon:icon}).addTo(markerLayer).bindPopup('<div class="popup-title">🌿 '+d.species+'</div><div class="popup-meta"><i>'+d.scientificName+'</i></div><div class="popup-meta">📍 '+d.location+' | 🧑‍🎓 '+d.student+' | '+d.session+'차시</div><div class="popup-body">'+d.observation+'</div>',{maxWidth:280});});}
+function refreshAll(data){document.getElementById('totalCount').textContent=data.length;document.getElementById('statObservations').textContent=data.length;const speciesSet=new Set(data.map(d=>d.species));document.getElementById('statSpecies').textContent=speciesSet.size;const studentSet=new Set(data.map(d=>d.student));document.getElementById('statStudents').textContent=studentSet.size;const sessionSet=new Set(data.map(d=>d.session));document.getElementById('statSessions').textContent=sessionSet.size;refreshMap(data);const panel=document.getElementById('list-panel');const sorted=[...data].sort((a,b)=>b.id-a.id);panel.innerHTML=sorted.map(d=>'<div class="card" onclick="map.setView(['+d.lat+','+d.lng+'],19);showTab(\'map\');"><div class="card-header"><span class="card-title">🌿 '+d.species+'</span><span class="card-session">'+d.session+'차시</span></div><div class="card-meta">📍 '+d.location+' | 🧑‍🎓 '+d.student+' | 📅 '+d.date+'</div><div class="card-body">'+d.observation+'</div></div>').join('');const sm={};data.forEach(d=>{if(!sm[d.species])sm[d.species]=0;sm[d.species]++;});document.getElementById('speciesList').innerHTML=Object.entries(sm).sort((a,b)=>b[1]-a[1]).map(([n,c])=>'<span class="species-badge">'+n+' ('+c+')</span>').join(' ');}
+loadFromSheet().then(data=>{if(data&&data.length>0){refreshAll(data);}});
+</script>
+</body>
+</html>
