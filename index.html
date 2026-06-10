@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ð¿ ê·¸ë¦°ë§µ GreenMap - ì¡ë¯¼ê´ì¤íêµ</title>
+<title>🌿 그린맵 GreenMap - 육민관중학교</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
@@ -320,14 +320,14 @@ body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
 
 <div class="header">
   <div>
-    <h1>ð¿ ê·¸ë¦°ë§µ GreenMap</h1>
-    <div class="subtitle">ì¡ë¯¼ê´ì¤íêµ STEAM ëìë¦¬</div>
+    <h1>🌿 그린맵 GreenMap</h1>
+    <div class="subtitle">육민관중학교 STEAM 동아리</div>
   </div>
   <div style="display:flex; align-items:center; gap:10px;">
-    <button class="admin-btn" id="adminBtn" onclick="toggleAdmin()">ð ê´ë¦¬</button>
+    <button class="admin-btn" id="adminBtn" onclick="toggleAdmin()">🔒 관리</button>
     <div class="stats">
       <div class="count" id="totalCount">12</div>
-      <div>ê´ì°° ê¸°ë¡</div>
+      <div>관찰 기록</div>
     </div>
   </div>
 </div>
@@ -335,82 +335,461 @@ body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
 <!-- Admin password dialog -->
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-dialog">
-    <h3>ð ê´ë¦¬ì ì¸ì¦</h3>
-    <div class="error" id="adminError">ë¹ë°ë²í¸ê° íë¦½ëë¤</div>
-    <input type="password" id="adminPw" placeholder="ë¹ë°ë²í¸ ìë ¥" onkeydown="if(event.key==='Enter')confirmAdmin()">
+    <h3>🔐 관리자 인증</h3>
+    <div class="error" id="adminError">비밀번호가 틀립니다</div>
+    <input type="password" id="adminPw" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')confirmAdmin()">
     <div class="btn-row">
-      <button class="btn-cancel" onclick="closeAdminDialog()">ì·¨ì¬</button>
-      <button class="btn-confirm" onclick="confirmAdmin()">íì¸</button>
+      <button class="btn-cancel" onclick="closeAdminDialog()">취소</button>
+      <button class="btn-confirm" onclick="confirmAdmin()">확인</button>
     </div>
   </div>
 </div>
 
 <div class="tab-bar">
-  <div class="tab active" onclick="showTab('map')">ðºï¸ ì§ë</div>
-  <div class="tab" onclick="showTab('list')">ð ê¸°ë¡</div>
-  <div class="tab" onclick="showTab('stats')">ð íí©</div>
-  <div class="tab" onclick="showTab('guide')">ð ìë´</div>
+  <div class="tab active" onclick="showTab('map')">🗺️ 지도</div>
+  <div class="tab" onclick="showTab('list')">📋 기록</div>
+  <div class="tab" onclick="showTab('stats')">📊 현황</div>
+  <div class="tab" onclick="showTab('guide')">📖 안내</div>
 </div>
 
 <div id="map"></div>
 
 <div id="list-panel" class="panel">
-  <!-- JSë¡ ì¹´ë ìì± -->
+  <!-- JS로 카드 생성 -->
 </div>
 
 <div id="stats-panel" class="panel">
   <div class="stat-grid">
     <div class="stat-box">
       <div class="stat-num" id="statObservations">12</div>
-      <div class="stat-label">ì´ ê´ì°° ê¸°ë¡</div>
+      <div class="stat-label">총 관찰 기록</div>
     </div>
     <div class="stat-box">
       <div class="stat-num" id="statSpecies">9</div>
-      <div class="stat-label">ë°ê²¬ ìë¬¼ ì¢</div>
+      <div class="stat-label">발견 식물 종</div>
     </div>
     <div class="stat-box">
       <div class="stat-num" id="statStudents">8</div>
-      <div class="stat-label">ì°¸ì¬ íì</div>
+      <div class="stat-label">참여 학생</div>
     </div>
     <div class="stat-box">
       <div class="stat-num" id="statSessions">3</div>
-      <div class="stat-label">ìë£ ì°¨ì</div>
+      <div class="stat-label">완료 차시</div>
     </div>
   </div>
 
-  <h3 style="font-size:14px; color:#1b4332; margin-bottom:10px;">ð ì°¨ìë³ ì§íë¥ </h3>
+  <h3 style="font-size:14px; color:#1b4332; margin-bottom:10px;">📅 차시별 진행률</h3>
 
   <div class="session-progress">
-    <div class="session-title">1ì°¨ì â íêµ ì£¼ë³ ìì ì¡°ì¬</div>
+    <div class="session-title">1차시 — 학교 주변 식생 조사</div>
     <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-    <div class="progress-text">5/5ëª ì ì¶ ìë£</div>
+    <div class="progress-text">5/5명 제출 완료</div>
   </div>
   <div class="session-progress">
-    <div class="session-title">2ì°¨ì â í ìÂ·ìì§ íê²½ ì¸¡ì </div>
+    <div class="session-title">2차시 — 토양·수질 환경 측정</div>
     <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
-    <div class="progress-text">4/5ëª ì ì¶</div>
+    <div class="progress-text">4/5명 제출</div>
   </div>
   <div class="session-progress">
-    <div class="session-title">3ì°¨ì â ìí ì§ë ë°ì´í° ìë ¥</div>
+    <div class="session-title">3차시 — 생태 지도 데이터 입력</div>
     <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
-    <div class="progress-text">3/5ëª ì ì¶</div>
+    <div class="progress-text">3/5명 제출</div>
   </div>
   <div class="session-progress">
-    <div class="session-title">4ì°¨ì â ì¸ëì¢Â·ììì¢ ë¶ë¥</div>
+    <div class="session-title">4차시 — 외래종·자생종 분류</div>
     <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
-    <div class="progress-text">ìì </div>
+    <div class="progress-text">예정</div>
   </div>
 
-  <h3 style="font-size:14px; color:#1b4332; margin:16px 0 10px;">ð± ë°ê²¬ ìë¬¼ ëª©ë¡</h3>
+  <h3 style="font-size:14px; color:#1b4332; margin:16px 0 10px;">🌱 발견 식물 목록</h3>
   <div id="speciesList"></div>
 </div>
 
 <div id="guide-panel" class="panel">
-  <a href="#" class="form-btn" onclick="alert('êµ¬ê¸ í¼ URLì ì¬ê¸°ì ì°ê²°íì¸ì')">ð ì´ë² ì°¨ì ê³¼ì  ì ì¶íê¸°</a>
+  <a href="#" class="form-btn" onclick="alert('구글 폼 URL을 여기에 연결하세요')">📝 이번 차시 과제 제출하기</a>
 
-  <h3 style="font-size:14px; color:#1b4332; margin-bottom:12px;">ì ì¶ ë°©ë² ìë´</h3>Ø9ÎÉÛN«:ÂÊ;Î»8ÉyÊxN¸ºÎ¹éÉÙÎÉêÎ¹	ÉkBÉèÉËÎ¸)ÉèâØÎ«É«Ø2ÙKÎ¸©BÈ¹Î«ºÂ«ZÎ»hB«¸ªRà¢ÂöFcà¢ÂöFcà£ÂöFcà £ÆFb6Æ73Ò&&÷GFöÒÖæfò#à¢##bÉÊºûÎ«HÊIÙY«Y5DTÒ¸ùÉXNºjÂ«{ºkº{RÂ¸ÛÉÛNØK¢«ZÎ«È¹ÎØ«É{¸ù£ÂöFcà £Ç67&Cà¢òòÓÓÒÈ9ÙHÂ¸ÛÉÛNØK«ZÎ«È¹ÎØ«É{¸ùÈ¹ÂÉÛB»h»hNÉØBÙËiÎºÂ«YË+BÓÓÐ¦6öç7B6×ÆTFFÒ°¢°¢C¢Â6W76öã¢Â7GVFVçC¢.«)x¾)x²"ÂFFS¢###bÓRÓ"À¢ÆC¢3rã3BÂÆæs¢#rãRÀ¢7V6W3¢.Ë*ÊØ"Â66VçFf4æÖS¢%&öFöFVæG&öâ66ÆVæ&6"À¢ö'6W'fFöã¢.¸i.ÉÛBÉ[Òã&ÒÂ»hNÙÞÈ8«Ø2ºxÎ«	ÂâÉèîÉØØ8É¹ÙRÂ¸ÞÉÛB»ëÊâÙN¸º«Éê^ÉéºjÎÉy^«{º:¸)¹èÙèÈ¹ÞÉêÂâ"À¢Æö6Föã¢.ÙY«YÊ	^ºËÙN¸º ¢ÒÀ¢°¢C¢"Â6W76öã¢Â7GVFVçC¢.ÉÛN)x¾)x²"ÂFFS¢###bÓRÓ"À¢ÆC¢3rã3rÂÆæs¢#rãÀ¢7V6W3¢.ÈhÎ¸)ºËB"Â66VçFf4æÖS¢%çW2FVç6fÆ÷&"À¢ö'6W'fFöã¢.È«:É[ÒÒÂÈÙKÎ¸©B»hÉØ«È8âÈiN»
-É«¸ºNÈ«HËâÈ«H»¸øBÉiÙâ"À¢Æö6Föã¢.ÙY«YÉ«N¸ùÉêR»hÊ«Ò ¢ÒÀ¢°¢C¢2Â6W76öã¢Â7GVFVçC¢.»	^)x¾)x²"ÂFFS¢###bÓRÓ"À¢ÆC¢3rã3ÂÆæs¢#rãÀ¢7V6W3¢.«	Î¸)ºjÂ"Â66VçFf4æÖS¢$f÷'7F¶÷&Væ"À¢ö'6W'fFöã¢.¸i.ÉÛBÉ[Ò&ÒÂ«Ø>ÉØÉÛNºû¸)ÙBâÉèîÉÛBºËNÈKÙY«(Â¸)ÉBâ¸»NÉêR¹K¹ÛÂÉ«Ø8ºjÂÙ^Ø9ÎºÂÈ¹ÞÉêÂâ"À¢Æö6Föã¢.ÙY«Y¸*Ê«Ò¸»NÉêR ¢ÒÀ¢°¢C¢BÂ6W76öã¢Â7GVFVçC¢.Ê	^)x¾)x²"ÂFFS¢###bÓRÓ"À¢ÆC¢3rã3ÂÆæs¢#rãRÀ¢7V6W3¢.¸ºÙ(Þ¸)ºËB"Â66VçFf4æÖS¢$6W"ÆÖGVÒ"À¢ö'6W'fFöã¢.È«:É[ÒVÒâÉèþÉØÈi»	N¸ºRºªÉiÉËÎºÂWã~«¹éâÙNÉêÂ¸[È8Â«ÉØB¸ºÙ(ÒÉÈ8ÊxÊ	ÉËÎºÂÊÙZâ"À¢Æö6Föã¢.ÙY«YÙ¸NºËÉÛ«{Â ¢ÒÀ¢°¢C¢RÂ6W76öã¢Â7GVFVçC¢.ËYÎ)x¾)x²"ÂFFS¢###bÓRÓ"À¢ÆC¢3rã3ÂÆæs¢#rã2À¢7V6W3¢.ÉØÙh¸)ºËB"Â66VçFf4æÖS¢$væ¶vò&Æö&"À¢ö'6W'fFöã¢.È«:É[Ò&ÒÂÈºËiNÊ	R3¸XBÉÛNÈ8â»hËN«ËBÉèþÉÛBØ«Êy^Êâ«ºÎÈºÂÈ¹ÞÉêÂâ"À¢Æö6Föã¢.ÙY«YÉYâ¸øNºÎ»8 ¢ÒÀ¢°¢C¢bÂ6W76öã¢"Â7GVFVçC¢.«)x¾)x²"ÂFFS¢###bÓRÓr"À¢ÆC¢3rã3"ÂÆæs¢#rãrÀ¢7V6W3¢.Øj¸ÎÙ("Â66VçFf4æÖS¢%G&föÆVÒ&WVç2"À¢ö'6W'fFöã¢.É«N¸ùÉêR«Éê^ÉéºjÂÉéN¹IBÈ*ÎÉÛNÉy«[¹ÛÒâÙÛÈ8«Ø2«	ÎÙBÊIâØjÉibã"ËÊ	Râ"À¢Æö6Föã¢.É«N¸ùÉêR¸*ÈIÎÊ«ÒÉéN¹IB ¢ÒÀ¢°¢C¢rÂ6W76öã¢"Â7GVFVçC¢.ÉÛN)x¾)x²"ÂFFS¢###bÓRÓr"À¢ÆC¢3rã3ÂÆæs¢#rã2À¢7V6W3¢.ÉR"Â66VçFf4æÖS¢$'FVÖ6&æ6W2"À¢ö'6W'fFöã¢.¸i.ÉÛBÉ[Ò36ÒÂØ«ÉÊÉÙÙj^«âÙY«Y¹*NØë»¹X^ÉyÉéÈ9ÒâØjÉiÈ«^¸øB»;NØkRâ"À¢Æö6Föã¢.ÙY«Y¹*NØë«;^ØK ¢ÒÀ¢°¢C¢Â6W76öã¢"Â7GVFVçC¢.»	^)x¾)x²"ÂFFS¢###bÓRÓr"À¢ÆC¢3rã3rÂÆæs¢#rãsrÀ¢7V6W3¢.«	^ÉXNÊxÙ("Â66VçFf4æÖS¢%6WF&f&F2"À¢ö'6W'fFöã¢.¸øNºÎ»8ËÙØÎºjÎØ«Ø¸ÉyÈIÂÈ9ÞÉêRâÉÛNÈ*ÞÉÛBÙ^ÈKÊIâ¸øNÈ¹ÂÙ«+ÒÊÉÙÈ*ÎººÂ«ºÒâ"À¢Æö6Föã¢.ÙY«YÉYâ»;N¸øN»NºÒØ¸ ¢ÒÀ¢°¢C¢Â6W76öã¢"Â7GVFVçC¢.Ê	^)x¾)x²"ÂFFS¢###bÓRÓr"À¢ÆC¢3rã3RÂÆæs¢#rã#À¢7V6W3¢.»)®¸)ºËB"Â66VçFf4æÖS¢%'VçW26W''VÆF"À¢ö'6W'fFöã¢.È«:É[ÒfÒÂÉ{NºzB»(NËÂÙ^ÈKËH«âÉèâ«Éê^ÉéºjÂØk¸¸¹©ÎºrâÊxN¹J~ºËÂÉ[Þ«B«HËâ"À¢Æö6Föã¢.ÙY«Y¸ùÊ«ÒÊ;ÎË
-ÉêR ¢ÒÀ¢°¢C¢Â6W76öã¢2Â7GVFVçC¢.«)x¾)x²"ÂFFS¢###bÓRÓ#B"À¢ÆC¢3rã3BÂÆæs¢#rãsRÀ¢7V6W3¢.Êx«+ÞÉÛB"Â66VçFf4æÖS¢%ÆçFvò6F6"À¢ö'6W'fFöã¢.ØjÉi¸ºNÊyÉÛBÈºÎÙYÂ«;>ÉyÈIÎ¸øBÈ9ÞÉêRâºÎÊ	ÎØ«ÙRÉèâ»É{Bâ¸»^ÉYR¸+NÈKÈ¹ÞºËÎºÂÈ9ÞØ9ÂÊxÙÎÊ(R«¸ªRâ"À¢Æö6Föã¢.ÙY«YÊxNÉè^ºÂ«Éê^ÉéºjÂ ¢ÒÀ¢°¢C¢Â6W76öã¢2Â7GVFVçC¢.ÉÛN)x¾)x²"ÂFFS¢###bÓRÓ#B"À¢ÆC¢3rã3BÂÆæs¢#rãRÀ¢7V6W3¢.º¨^ÉXNÊ;Â"Â66VçFf4æÖS¢$6Væ÷öFVÒÆ'VÒ"À¢ö'6W'fFöã¢.¸i.ÉÛBÉ[ÒC6ÒÂÉèâ¹+~ºNÉyÙYÉh«º:â»«;^ØKÉyÈIÂ»	Î«*ÂâÊxÈhÂ»hÙBØjÉiÊxÙÎÈ¹ÞºËÂâ"À¢Æö6Föã¢.ÙY«Y¸*Ê«Ò»ØK ¢ÒÀ¢°¢C¢"Â6W76öã¢2Â7GVFVçC¢.ËYÎ)x¾)x²"ÂFFS¢###bÓRÓ#B"À¢ÆC¢3rã3ÂÆæs¢#rãs2À¢7V6W3¢.ÈhÎ¸)ºËB"Â66VçFf4æÖS¢%çW2FVç6fÆ÷&"À¢ö'6W'fFöã¢.È«:É[ÒÒÂË
-È¹ÂÊÈ*ÂÈhÎ¸)ºËNÉ¸ºNº[«	ÎË+BâÈiNÉèîÙÞØÈÎºjÂÙKÎÙ[BÙÙNÊ«HËâÈÈKÉ[Þ«BÉ[ÞÙBâ"À¢Æö6Föã¢.ÙY«YÈIÎÊ«ÒÉk¸ÙR ¢Ð¥Ó° ¢òòÓÓÒ«HºjÎÉéºª¹9ÂÓÓÐ¦ÆWB4FÖâÒfÇ6S°¦6öç7BDÔåõrÒsS#s°¦6öç7BÖ&¶W'2ÒµÓ²òòºxËºBËÊÊÉêP¦ÆWBFVÆWFVDG2Ò¥4ôâç'6RÆö6Å7F÷&vRævWDFVÒvw&VVæÖöFVÆWFVBrÇÂuµÒr° ¦gVæ7FöâFövvÆTFÖâ°¢b4FÖâ°¢4FÖâÒfÇ6S°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖä'Fâræ6Æ74Æ7Bç&VÖ÷fRv7FfRr°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖä'FâræææW$DÔÂÒ	ùI"«HºjÂs°¢&Vg&W6Ö&¶W'2°¢ÒVÇ6R°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖä÷fW&Æræ6Æ74Æ7BæFBw6÷rr°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖårrçfÇVRÒrs°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖäW'&÷"rç7GÆRæF7ÆÒvæöæRs°¢6WEFÖV÷WBÓâFö7VÖVçBævWDVÆVÖVçD'BvFÖårræfö7W2Â°¢Ð§Ð ¦gVæ7Föâ6öæf&ÔFÖâ°¢bFö7VÖVçBævWDVÆVÖVçD'BvFÖårrçfÇVRÓÓÒDÔåõr°¢4FÖâÒG'VS°¢6Æ÷6TFÖäFÆör°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖä'Fâræ6Æ74Æ7BæFBv7FfRr°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖä'FâræææW$DÔÂÒ	ùI2«HºjÂôâs°¢&Vg&W6Ö&¶W'2°¢ÒVÇ6R°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖäW'&÷"rç7GÆRæF7ÆÒv&Æö6²s°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖårrçfÇVRÒrs°¢Ð§Ð ¦gVæ7Föâ6Æ÷6TFÖäFÆör°¢Fö7VÖVçBævWDVÆVÖVçD'BvFÖä÷fW&Æræ6Æ74Æ7Bç&VÖ÷fRw6÷rr°§Ð ¦gVæ7FöâFVÆWFTÖ&¶W"B°¢b6öæf&Ò~ÉÛB«HË«ºÞÉØBÈ*ÞÊ	ÎÙYÈ¹Î«*È«^¸¸«Ãòr&WGW&ã°¢FVÆWFVDG2çW6B°¢Æö6Å7F÷&vRç6WDFVÒvw&VVæÖöFVÆWFVBrÂ¥4ôâç7G&ævgFVÆWFVDG2°¢&Vg&W6Ö&¶W'2°¢&VæFW$Æ7B°¢&VæFW%7V6W2°¢WFFU7FG2°§Ð ¦gVæ7Föâ&W7F÷&TÆÂ°¢b6öæf&Ò~È*ÞÊ	Î¹	Âºª¹:«ºÞÉØB»;^É¹ÙYÈ¹Î«*È«^¸¸«Ãòr&WGW&ã°¢FVÆWFVDG2ÒµÓ°¢Æö6Å7F÷&vRç6WDFVÒvw&VVæÖöFVÆWFVBrÂuµÒr°¢&Vg&W6Ö&¶W'2°¢&VæFW$Æ7B°¢&VæFW%7V6W2°¢WFFU7FG2°§Ð ¦gVæ7FöâvWD7FfTFF°¢&WGW&â6×ÆTFFæfÇFW"BÓâFVÆWFVDG2ææ6ÇVFW2BæB°§Ð ¦gVæ7FöâWFFU7FG2°¢6öç7BFFÒvWD7FfTFF°¢6öç7B7V6W2ÒæWr6WBFFæÖBÓâBç7V6W2°¢6öç7B7GVFVçG2ÒæWr6WBFFæÖBÓâBç7GVFVçB°¢6öç7B6W76öç2ÒæWr6WBFFæÖBÓâBç6W76öâ°¢Fö7VÖVçBævWDVÆVÖVçD'BwF÷FÄ6÷VçBrçFWD6öçFVçBÒFFæÆVæwF°¢Fö7VÖVçBævWDVÆVÖVçD'Bw7FDö'6W'fFöç2rçFWD6öçFVçBÒFFæÆVæwF°¢Fö7VÖVçBævWDVÆVÖVçD'Bw7FE7V6W2rçFWD6öçFVçBÒ7V6W2ç6¦S°¢Fö7VÖVçBævWDVÆVÖVçD'Bw7FE7GVFVçG2rçFWD6öçFVçBÒ7GVFVçG2ç6¦S°¢Fö7VÖVçBævWDVÆVÖVçD'Bw7FE6W76öç2rçFWD6öçFVçBÒ6W76öç2ç6¦S°§Ð ¢òòÓÓÒÊx¸øBËH«ÙBÓÓÐ¦6öç7BÖÒÂæÖvÖrç6WEfWr³3rã3BÂ#rãUÒÂr° ¤ÂçFÆTÆW"vGG3¢ò÷·7ÒçFÆRæ÷Vç7G&VWFÖæ÷&r÷·§Ò÷·Ò÷·ÒçærrÂ°¢GG&'WFöã¢|*÷Vå7G&VWDÖ6öçG&'WF÷'2rÀ¢Ö¦ööÓ¢§ÒæFEFòÖ° ¢òòÙY«YºxËº@¦6öç7B66ööÄ6öâÒÂæFd6öâ°¢FÖÃ¢	øú²rÀ¢6Æ74æÖS¢w66ööÂÖÖ&¶W"rÀ¢6öå6¦S¢³3Â3ÒÀ¢6öäæ6÷#¢³RÂUÐ§Ò°¤ÂæÖ&¶W"³3rã3BÂ#rãUÒÂ²6öã¢66ööÄ6öâÒ¢æFEFòÖ¢æ&æE÷WsÆ#ï	øú²ÉÊºûÎ«HÊIÙY«YÂö#ãÆ'#å5DTÒ¸ùÉXNºjÂ«{ºkº{R»;»hr° ¢òòÈKÈY»8BÈ8È8¦6öç7B6W76öä6öÆ÷'2Ò°¢¢r3&CfFbrÀ¢#¢r3Cf2rÀ¢3¢r3S&#srÀ¢C¢r3sF3cBp§Ó° ¢òòºxËºBÈ9ÞÈKÙZÈ¦gVæ7Föâ&Vg&W6Ö&¶W'2°¢òò«ÊBºxËºBÊ	Î« ¢Ö&¶W'2æf÷$V6ÒÓâÖç&VÖ÷fTÆW"Ò°¢Ö&¶W'2æÆVæwFÒ° ¢6öç7B7FfTFFÒvWD7FfTFF°¢7FfTFFæf÷$V6BÓâ°¢6öç7B6öÆ÷"Ò6W76öä6öÆ÷'5¶Bç6W76öåÒÇÂr3VCV#"s°¢6öç7B6öâÒÂæFd6öâ°¢FÖÃ¢ÆFb7GÆSÒ&&6¶w&÷VæC¢G¶6öÆ÷'Ó²vGF£#²VvC£#²&÷&FW"×&FW3£SS²&÷&FW#£76öÆBvFS²&÷×6F÷s£'g&v&ÃÃÃã2²F7Æ¦fÆW²ÆvâÖFV×3¦6VçFW#²§W7FgÖ6öçFVçC¦6VçFW#²föçB×6¦S£G²#ï	øËÂöFcæÀ¢6Æ74æÖS¢rrÀ¢6öå6¦S¢³#Â#ÒÀ¢6öäæ6÷#¢³BÂEÐ¢Ò° ¢6öç7BFVÆWFT'FâÒ4FÖà¢òÆ'WGFöâ6Æ73Ò'÷WÖFVÆWFRÖ'Fâ"öæ6Æ6³Ò&FVÆWFTÖ&¶W"G¶BæGÒ#ï	ùyûòÉÛB«ºÒÈ*ÞÊ	ÃÂö'WGFöãæ ¢¢rs° ¢6öç7BÖ&¶W"ÒÂæÖ&¶W"¶BæÆBÂBæÆæuÒÂ²6öã¢6öâÒ¢æFEFòÖ¢æ&æE÷W ¢ÆFb6Æ73Ò'÷W×FFÆR#ï	øËòG¶Bç7V6W7ÓÂöFcà¢ÆFb6Æ73Ò'÷WÖÖWF#ãÆâG¶Bç66VçFf4æÖWÓÂöãÂöFcà¢ÆFb6Æ73Ò'÷WÖÖWF#ï	ù8ÒG¶BæÆö6FöçÒÂ	úy(ß	øé2G¶Bç7GVFVçGÒÂG¶Bç6W76öçÞË
-È¹ÃÂöFcà¢ÆFb6Æ73Ò'÷WÖ&öG#âG¶Bæö'6W'fFöçÓÂöFcà¢ÆFb6Æ73Ò'÷W×÷Fò×Æ6VöÆFW"#ï	ù;rÈ*ÎÊxB«ZÎ«ØûÂÉ{¸ùÈ¹ÂÙÎÈ¹ÂÂöFcà¢G¶FVÆWFT'FçÐ¢Â²ÖvGF¢#Ò°¢Ö&¶W'2çW6Ö&¶W"°¢Ò° ¢òò«HºjÎÉéºª¹9ÎÉÛÂ¹XÂ»;^É¹»(NØ«ÂÙÎÈ¹À¢b4FÖâbbFVÆWFVDG2æÆVæwFâ°¢6öç7B&W7F÷&TFÖÂÒÆFb7GÆSÒ'FWBÖÆvã¦6VçFW#²FFæs£²#à¢Æ'WGFöâöæ6Æ6³Ò'&W7F÷&TÆÂ"7GÆSÒ&&6¶w&÷VæC¢3Cf3²6öÆ÷#§vFS²&÷&FW#¦æöæS²FFæs£g²&÷&FW"×&FW3£²föçB×6¦S£'²7W'6÷#§öçFW#²#à¢)¾ûòÈ*ÞÊ	Î¹	ÂG¶FVÆWFVDG2æÆVæwFÞ«	Â«ºÒ»;^É¹ ¢Âö'WGFöããÂöFcæ°¢Fö7VÖVçBævWDVÆVÖVçD'BvÆ7B×æVÂræç6W'DF¦6VçDDÔÂvgFW&&VvârÂ&W7F÷&TFÖÂ°¢Ð§Ð ¢òòËH«ºxËºBÈ9ÞÈK§&Vg&W6Ö&¶W'2°§WFFU7FG2° ¢òòÓÓÒ«ºÒºªºÒÈ9ÞÈKÓÓÐ¦gVæ7Föâ&VæFW$Æ7B°¢6öç7BæVÂÒFö7VÖVçBævWDVÆVÖVçD'BvÆ7B×æVÂr°¢6öç7B6÷'FVBÒ²ââævWD7FfTFFÒç6÷'BÂ"Óâ"æBÒæB° ¢ÆWBFÖÂÒrs°¢b4FÖâbbFVÆWFVDG2æÆVæwFâ°¢FÖÂ³ÒÆFb7GÆSÒ'FWBÖÆvã¦6VçFW#²FFæs£²Ö&vâÖ&÷GFöÓ£²#à¢Æ'WGFöâöæ6Æ6³Ò'&W7F÷&TÆÂ"7GÆSÒ&&6¶w&÷VæC¢3Cf3²6öÆ÷#§vFS²&÷&FW#¦æöæS²FFæs£g²&÷&FW"×&FW3£²föçB×6¦S£'²7W'6÷#§öçFW#²föçB×vVvC£c²#à¢)¾ûòÈ*ÞÊ	Î¹	ÂG¶FVÆWFVDG2æÆVæwFÞ«	Â«ºÒ»;^É¹ ¢Âö'WGFöããÂöFcæ°¢Ð ¢FÖÂ³Ò6÷'FVBæÖBÓâ ¢ÆFb6Æ73Ò&6&B"öæ6Æ6³Ò&Öç6WEfWr²G¶BæÆGÒÂG¶BæÆæwÕÒÂ²6÷uF"vÖr²#à¢ÆFb6Æ73Ò&6&BÖVFW"#à¢Ç7â6Æ73Ò&6&B×FFÆR#ï	øËòG¶Bç7V6W7ÓÂ÷7ãà¢Ç7â6Æ73Ò&6&B×6W76öâ#âG¶Bç6W76öçÞË
-È¹ÃÂ÷7ãà¢ÂöFcà¢ÆFb6Æ73Ò&6&BÖÖWF#ï	ù8ÒG¶BæÆö6FöçÒÂ	úy(ß	øé2G¶Bç7GVFVçGÒÂ	ù8RG¶BæFFWÓÂöFcà¢ÆFb6Æ73Ò&6&BÖ&öG#âG¶Bæö'6W'fFöçÓÂöFcà¢G¶4FÖâòÆ'WGFöâ6Æ73Ò'÷WÖFVÆWFRÖ'Fâ"öæ6Æ6³Ò&WfVçBç7F÷&÷vFöâ²FVÆWFTÖ&¶W"G¶BæGÒ#ï	ùyûòÈ*ÞÊ	ÃÂö'WGFöãæ¢rwÐ¢ÂöFcà¢æ¦öârr° ¢æVÂæææW$DÔÂÒFÖÃ°§Ð§&VæFW$Æ7B° ¢òòÓÓÒÈ¹ÞºËÂÊ(RºªºÒÓÓÐ¦gVæ7Föâ&VæFW%7V6W2°¢6öç7B7V6W4ÖÒ·Ó°¢vWD7FfTFFæf÷$V6BÓâ°¢b7V6W4Ö¶Bç7V6W5Ò7V6W4Ö¶Bç7V6W5ÒÒ²æÖS¢Bç66VçFf4æÖRÂ6÷VçC¢Ó°¢7V6W4Ö¶Bç7V6W5Òæ6÷VçB²³°¢Ò° ¢6öç7BVÂÒFö7VÖVçBævWDVÆVÖVçD'Bw7V6W4Æ7Br°¢VÂæææW$DÔÂÒö&¦V7BæVçG&W27V6W4Ö¢ç6÷'BÂ"Óâ%³Òæ6÷VçBÒ³Òæ6÷VçB¢æÖ¶æÖRÂæfõÒÓâÇ7â6Æ73Ò'7V6W2Ö&FvR#âG¶æÖWÒG¶æfòæ6÷VçGÒÂ÷7ãæ¢æ¦öârr°§Ð§&VæFW%7V6W2° ¢òòÓÓÒØ:ÒÊNÙÓÓÐ¦gVæ7Föâ6÷uF"æÖR°¢Fö7VÖVçBçVW'6VÆV7F÷$ÆÂrçF"ræf÷$V6BÓâBæ6Æ74Æ7Bç&VÖ÷fRv7FfRr°¢Fö7VÖVçBçVW'6VÆV7F÷$ÆÂrçæVÂræf÷$V6Óâæ6Æ74Æ7Bç&VÖ÷fRv7FfRr° ¢6öç7BF'2ÒFö7VÖVçBçVW'6VÆV7F÷$ÆÂrçF"r°¢6öç7BF$ÖÒ²Ö¢ÂÆ7C¢Â7FG3¢"ÂwVFS¢2Ó°¢F'5·F$Ö¶æÖUÕÒæ6Æ74Æ7BæFBv7FfRr° ¢bæÖRÓÓÒvÖr°¢Fö7VÖVçBævWDVÆVÖVçD'BvÖrç7GÆRæF7ÆÒv&Æö6²s°¢ÖæçfÆFFU6¦R°¢ÒVÇ6R°¢Fö7VÖVçBævWDVÆVÖVçD'BvÖrç7GÆRæF7ÆÒvæöæRs°¢Fö7VÖVçBævWDVÆVÖVçD'BæÖR²r×æVÂræ6Æ74Æ7BæFBv7FfRr°¢Ð§Ð ¢òòÓÓÒ«ZÎ«È¹ÎØ«É{¸ùÈºNÊ	ÂÈ*ÎÉªÈ¹ÂÙÎÈKÙBÓÓÐ¢ò ¦6öç7B4TUEõU$ÂÒvGG3¢òöFö72ævöövÆRæ6öÒ÷7&VG6VWG2öBõõU%õ4TUEôBöwf¢÷G÷GÖ÷WC¦§6öâs° ¦7æ2gVæ7FöâÆöDg&öÕ6VWB°¢G'°¢6öç7B&W2ÒvBfWF64TUEõU$Â°¢6öç7BFWBÒvB&W2çFWB°¢òòvöövÆR6VWG2¥4ôâÉÙ¸»^ÉyÈIÂ¸ÛÉÛNØKØÈÎÈ»¢6öç7B§6öâÒ¥4ôâç'6RFWBç7V'7G&ærCrç6Æ6RÂÓ"°¢6öç7B&÷w2Ò§6öâçF&ÆRç&÷w3° ¢6öç7BFFÒ&÷w2æÖ&÷rÂÓâ°¢C¢²À¢6W76öã¢'6TçB&÷ræ5³ÓòçbÇÂÀ¢7GVFVçC¢&÷ræ5³ÓòçbÇÂrrÀ¢FFS¢&÷ræ5³%ÓòçbÇÂrrÀ¢ÆC¢'6TfÆöB&÷ræ5³5ÓòçbÇÂÀ¢Ææs¢'6TfÆöB&÷ræ5³EÓòçbÇÂÀ¢7V6W3¢&÷ræ5³UÓòçbÇÂrrÀ¢66VçFf4æÖS¢&÷ræ5³eÓòçbÇÂrrÀ¢ö'6W'fFöã¢&÷ræ5³uÓòçbÇÂrrÀ¢Æö6Föã¢&÷ræ5³ÓòçbÇÂrrÀ¢Ò° ¢&WGW&âFF°¢Ò6F6R°¢6öç6öÆRæW'&÷"~È¹ÎØ«ºÎ¹9ÂÈºNØÊ¢rÂR°¢&WGW&â6×ÆTFF²òòÈºNØÊÈ¹ÂÈ9ÙHÂ¸ÛÉÛNØKÈ*ÎÉª¢Ð§Ð ¢òòØéÉÛNÊxºÎ¹9ÂÈ¹ÂÈ¹ÎØ«ÉyÈIÂ¸ÛÉÛNØK«ÊÉN« ¢òòÆöDg&öÕ6VWBçFVâFFÓâ²âââÒ°¢¢ð£Â÷67&Cà£Âö&öGà£ÂöFÖÃà
+  <h3 style="font-size:14px; color:#1b4332; margin-bottom:12px;">제출 방법 안내</h3>
+
+  <div class="guide-step">
+    <div class="guide-num">1</div>
+    <div class="guide-content">
+      <h3>현장에서 관찰하기</h3>
+      <p>학교 주변 또는 지정된 조사 구역에서 식물을 관찰합니다. 위치, 종류, 상태를 기록하세요.</p>
+    </div>
+  </div>
+  <div class="guide-step">
+    <div class="guide-num">2</div>
+    <div class="guide-content">
+      <h3>사진 촬영하기</h3>
+      <p>식물의 전체 모습과 잎·꽃 등 특징이 보이도록 가까이에서 촬영합니다. 최소 1장, 권장 2~3장.</p>
+    </div>
+  </div>
+  <div class="guide-step">
+    <div class="guide-num">3</div>
+    <div class="guide-content">
+      <h3>구글 폼으로 제출</h3>
+      <p>위의 [과제 제출하기] 버튼을 누르면 구글 폼이 열립니다. GPS 위치는 자동 입력되며, 사진과 관찰 기록을 작성하세요.</p>
+    </div>
+  </div>
+  <div class="guide-step">
+    <div class="guide-num">4</div>
+    <div class="guide-content">
+      <h3>지도에서 확인</h3>
+      <p>제출 후 [지도] 탭에서 내 기록이 표시되는지 확인합니다. 다른 친구들의 기록도 함께 볼 수 있어요.</p>
+    </div>
+  </div>
+
+  <h3 style="font-size:14px; color:#1b4332; margin:16px 0 10px;">관찰 기록 작성 예시</h3>
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">🌸 철쭉 (Rhododendron)</span>
+      <span class="card-session">1차시</span>
+    </div>
+    <div class="card-meta">📍 학교 정문 화단 | 🧑‍🎓 김○○</div>
+    <div class="card-body">
+      높이 약 1.2m, 분홍색 꽃이 만개 상태. 잍은 타원형으로 끝이 뾰족하며 가장자리가 매끄쟽다. 화단 가장자리에 5껸루가 나란히 실어저 있음. 토양은 약갈 습한 상태이고, 주변에 진닀래와 혼재되어 있으나 잍 크기와 꽃 피는 시기로 구분 가능.
+    </div>
+  </div>
+</div>
+
+<div class="bottom-info">
+  2026 육민관중학교 STEAM 동아리 그린맵 | 데이터: 구글 시트 연동
+</div>
+
+<script>
+// === 샘플 데이터 (구글 시트 연동 시 이 부분을 API 호출로 교체) ===
+const sampleData = [
+  {
+    id: 1, session: 1, student: "김○○", date: "2026-05-10",
+    lat: 37.3094, lng: 127.9185,
+    species: "철쭉", scientificName: "Rhododendron schlippenbachii",
+    observation: "높이 약 1.2m, 분홍색 꽃 만개. 잌은 타원형, 끝이 뾰족. 화단 가장자리에 5그루 나띠히 식재.",
+    location: "학교 정문 화단"
+  },
+  {
+    id: 2, session: 1, student: "이○○", date: "2026-05-10",
+    lat: 37.3097, lng: 127.9180,
+    species: "소나무", scientificName: "Pinus densiflora",
+    observation: "수고 약 8m, 수피는 붉은 갈색. 솔방울 다수 관찰. 수관 밀도 양호.",
+    location: "학교 운동장 북쪽"
+  },
+  {
+    id: 3, session: 1, student: "박○○", date: "2026-05-10",
+    lat: 37.3091, lng: 127.9190,
+    species: "개나리", scientificName: "Forsythia koreana",
+    observation: "높이 약 2m, 꽃은 이미 낙화. 잎이 무성하게 나옴. 담장 따라 울타리 형태로 식재.",
+    location: "학교 남쪽 담장"
+  },
+  {
+    id: 4, session: 1, student: "정○○", date: "2026-05-10",
+    lat: 37.3099, lng: 127.9195,
+    species: "단풍나무", scientificName: "Acer palmatum",
+    observation: "수고 약 5m. 잍은 손바닥 모양으로 5~7갈래. 현재 녹색, 가을 단풍 예상 지점으로 적합.",
+    location: "학교 후문 인근"
+  },
+  {
+    id: 5, session: 1, student: "최○○", date: "2026-05-10",
+    lat: 37.3089, lng: 127.9183,
+    species: "은행나무", scientificName: "Ginkgo biloba",
+    observation: "수고 약 12m, 수령 추정 30년 이상. 부채꼴 잍이 특징적. 가로수로 식재.",
+    location: "학교 앞 도로변"
+  },
+  {
+    id: 6, session: 2, student: "김○○", date: "2026-05-17",
+    lat: 37.3092, lng: 127.9187,
+    species: "토끹풀", scientificName: "Trifolium repens",
+    observation: "운동장 가장자리 잔디 사이에 군락. 흰색 꽃 개화 중. 토양 pH 6.2 측정.",
+    location: "운동장 남서쪽 잔디"
+  },
+  {
+    id: 7, session: 2, student: "이○○", date: "2026-05-17",
+    lat: 37.3101, lng: 127.9193,
+    species: "쑥", scientificName: "Artemisia princeps",
+    observation: "높이 약 30cm, 특유의 향기. 학교 뒤펔 빈 땅에 자생. 토양 습도 보통.",
+    location: "학교 뒤펔 공터"
+  },
+  {
+    id: 8, session: 2, student: "박○○", date: "2026-05-17",
+    lat: 37.3087, lng: 127.9177,
+    species: "강아지풀", scientificName: "Setaria viridis",
+    observation: "도로변 콘크리트 틈에서 생장. 이삭이 형성 중. 도시 환경 적응 사례로 기록.",
+    location: "학교 앞 보도블록 틈"
+  },
+  {
+    id: 9, session: 2, student: "정○○", date: "2026-05-17",
+    lat: 37.3095, lng: 127.9200,
+    species: "벚나무", scientificName: "Prunus serrulata",
+    observation: "수고 약 6m, 열매(버찜) 형성 �4�기. 잍 가장자리 톱니 뚜렷. 진딧물 약간 관찰.",
+    location: "학교 동쪽 주차장"
+  },
+  {
+    id: 10, session: 3, student: "김○○", date: "2026-05-24",
+    lat: 37.3104, lng: 127.9175,
+    species: "질경이", scientificName: "Plantago asiatica",
+    observation: "토양 다짐이 심한 곳에서도 생장. 로제튻형 잎 배열. 답았 내성 식물로 생태 지쑝종 가능.",
+    location: "학교 진입로 가장자리"
+  },
+  {
+    id: 11, session: 3, student: "이○○", date: "2026-05-24",
+    lat: 37.3084, lng: 127.9185,
+    species: "명아주", scientificName: "Chenopodium album",
+    observation: "높이 약 40cm, 잎 뒷면에 하얀 가루. 빈 공터에서 발견. 질소 부화 토양 지표식물.",
+    location: "학교 남쪽 빈터"
+  },
+  {
+    id: 12, session: 3, student: "최○○", date: "2026-05-24",
+    lat: 37.3098, lng: 127.9173,
+    species: "소나무", scientificName: "Pinus densiflora",
+    observation: "수고 약 10m, 1차시 조사 소나무와 다른 개체. 솔잎혽파리 피해 흑적 관찰. 수세 약갈 약화.",
+    location: "학교 서쪽 언덕"
+  }
+];
+
+// === 관리자 모드 ===
+let isAdmin = false;
+const ADMIN_PW = '1520';
+const markers = []; // 마커 참조 저장
+let deletedIds = JSON.parse(localStorage.getItem('greenmap_deleted') || '[]');
+
+function toggleAdmin() {
+  if (isAdmin) {
+    isAdmin = false;
+    document.getElementById('adminBtn').classList.remove('active');
+    document.getElementById('adminBtn').innerHTML = '🔒 관리';
+    refreshMarkers();
+  } else {
+    document.getElementById('adminOverlay').classList.add('show');
+    document.getElementById('adminPw').value = '';
+    document.getElementById('adminError').style.display = 'none';
+    setTimeout(() => document.getElementById('adminPw').focus(), 100);
+  }
+}
+
+function confirmAdmin() {
+  if (document.getElementById('adminPw').value === ADMIN_PW) {
+    isAdmin = true;
+    closeAdminDialog();
+    document.getElementById('adminBtn').classList.add('active');
+    document.getElementById('adminBtn').innerHTML = '🔓 관리 ON';
+    refreshMarkers();
+  } else {
+    document.getElementById('adminError').style.display = 'block';
+    document.getElementById('adminPw').value = '';
+  }
+}
+
+function closeAdminDialog() {
+  document.getElementById('adminOverlay').classList.remove('show');
+}
+
+function deleteMarker(id) {
+  if (!confirm('이 관찰 기록을 삭제하시겠습니까?')) return;
+  deletedIds.push(id);
+  localStorage.setItem('greenmap_deleted', JSON.stringify(deletedIds));
+  refreshMarkers();
+  renderList();
+  renderSpecies();
+  updateStats();
+}
+
+function restoreAll() {
+  if (!confirm('삭제된 모든 기록을 복원하시겠습니까?')) return;
+  deletedIds = [];
+  localStorage.setItem('greenmap_deleted', '[]');
+  refreshMarkers();
+  renderList();
+  renderSpecies();
+  updateStats();
+}
+
+function getActiveData() {
+  return sampleData.filter(d => !deletedIds.includes(d.id));
+}
+
+function updateStats() {
+  const data = getActiveData();
+  const species = new Set(data.map(d => d.species));
+  const students = new Set(data.map(d => d.student));
+  const sessions = new Set(data.map(d => d.session));
+  document.getElementById('totalCount').textContent = data.length;
+  document.getElementById('statObservations').textContent = data.length;
+  document.getElementById('statSpecies').textContent = species.size;
+  document.getElementById('statStudents').textContent = students.size;
+  document.getElementById('statSessions').textContent = sessions.size;
+}
+
+// === 지도 초기화 ===
+const map = L.map('map').setView([37.3094, 127.9185], 17);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors',
+  maxZoom: 19
+}).addTo(map);
+
+// 학교 마커
+const schoolIcon = L.divIcon({
+  html: '🏫',
+  className: 'school-marker',
+  iconSize: [30, 30],
+  iconAnchor: [15, 15]
+});
+L.marker([37.3094, 127.9185], { icon: schoolIcon })
+  .addTo(map)
+  .bindPopup('<b>🏫 육민관중학교</b><br>STEAM 동아리 그린맵 본부');
+
+// 세션별 색상
+const sessionColors = {
+  1: '#2d6a4f',
+  2: '#40916c',
+  3: '#52b788',
+  4: '#74c69d'
+};
+
+// 마커 생성 함수
+function refreshMarkers() {
+  // 기존 마커 제거
+  markers.forEach(m => map.removeLayer(m));
+  markers.length = 0;
+
+  const activeData = getActiveData();
+  activeData.forEach(d => {
+    const color = sessionColors[d.session] || '#95d5b2';
+    const icon = L.divIcon({
+      html: `<div style="background:${color}; width:28px; height:28px; border-radius:50%; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; font-size:14px;">🌱</div>`,
+      className: '',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+
+    const deleteBtn = isAdmin
+      ? `<button class="popup-delete-btn" onclick="deleteMarker(${d.id})">🗑️ 이 기록 삭제</button>`
+      : '';
+
+    const marker = L.marker([d.lat, d.lng], { icon: icon })
+      .addTo(map)
+      .bindPopup(`
+        <div class="popup-title">🌿 ${d.species}</div>
+        <div class="popup-meta"><i>${d.scientificName}</i></div>
+        <div class="popup-meta">📍 ${d.location} | 🧑‍🎓 ${d.student} | ${d.session}차시</div>
+        <div class="popup-body">${d.observation}</div>
+        <div class="popup-photo-placeholder">📷 사진 (구글 폼 연동 시 표시)</div>
+        ${deleteBtn}
+      `, { maxWidth: 280 });
+    markers.push(marker);
+  });
+
+  // 관리자 모드일 때 복원 버튼 표시
+  if (isAdmin && deletedIds.length > 0) {
+    const restoreHtml = `<div style="text-align:center; padding:8px;">
+      <button onclick="restoreAll()" style="background:#40916c; color:white; border:none; padding:8px 16px; border-radius:8px; font-size:12px; cursor:pointer;">
+        ♻️ 삭제된 ${deletedIds.length}개 기록 복원
+      </button></div>`;
+    document.getElementById('list-panel').insertAdjacentHTML('afterbegin', restoreHtml);
+  }
+}
+
+// 초기 마커 생성
+refreshMarkers();
+updateStats();
+
+// === 기록 목록 생성 ===
+function renderList() {
+  const panel = document.getElementById('list-panel');
+  const sorted = [...getActiveData()].sort((a, b) => b.id - a.id);
+
+  let html = '';
+  if (isAdmin && deletedIds.length > 0) {
+    html += `<div style="text-align:center; padding:8px; margin-bottom:8px;">
+      <button onclick="restoreAll()" style="background:#40916c; color:white; border:none; padding:8px 16px; border-radius:8px; font-size:12px; cursor:pointer; font-weight:600;">
+        ♻️ 삭제된 ${deletedIds.length}개 기록 복원
+      </button></div>`;
+  }
+
+  html += sorted.map(d => `
+    <div class="card" onclick="map.setView([${d.lat}, ${d.lng}], 19); showTab('map');">
+      <div class="card-header">
+        <span class="card-title">🌿 ${d.species}</span>
+        <span class="card-session">${d.session}차시</span>
+      </div>
+      <div class="card-meta">📍 ${d.location} | 🧑‍🎓 ${d.student} | 📅 ${d.date}</div>
+      <div class="card-body">${d.observation}</div>
+      ${isAdmin ? `<button class="popup-delete-btn" onclick="event.stopPropagation(); deleteMarker(${d.id})">🗑️ 삭제</button>` : ''}
+    </div>
+  `).join('');
+
+  panel.innerHTML = html;
+}
+renderList();
+
+// === 식물 종 목록 ===
+function renderSpecies() {
+  const speciesMap = {};
+  getActiveData().forEach(d => {
+    if (!speciesMap[d.species]) speciesMap[d.species] = { name: d.scientificName, count: 0 };
+    speciesMap[d.species].count++;
+  });
+
+  const el = document.getElementById('speciesList');
+  el.innerHTML = Object.entries(speciesMap)
+    .sort((a, b) => b[1].count - a[1].count)
+    .map(([name, info]) => `<span class="species-badge">${name} (${info.count})</span>`)
+    .join(' ');
+}
+renderSpecies();
+
+// === 탭 전환 ===
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+
+  const tabs = document.querySelectorAll('.tab');
+  const tabMap = { map: 0, list: 1, stats: 2, guide: 3 };
+  tabs[tabMap[name]].classList.add('active');
+
+  if (name === 'map') {
+    document.getElementById('map').style.display = 'block';
+    map.invalidateSize();
+  } else {
+    document.getElementById('map').style.display = 'none';
+    document.getElementById(name + '-panel').classList.add('active');
+  }
+}
+
+// === 구글 시트 연동 (실제 사용 시 활성화) ===
+/*
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/gviz/tq?tqx=out:json';
+
+async function loadFromSheet() {
+  try {
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+    // Google Sheets JSON 응답에서 데이터 파싱
+    const json = JSON.parse(text.substring(47).slice(0, -2));
+    const rows = json.table.rows;
+
+    const data = rows.map((row, i) => ({
+      id: i + 1,
+      session: parseInt(row.c[0]?.v) || 1,
+      student: row.c[1]?.v || '',
+      date: row.c[2]?.v || '',
+      lat: parseFloat(row.c[3]?.v) || 0,
+      lng: parseFloat(row.c[4]?.v) || 0,
+      species: row.c[5]?.v || '',
+      scientificName: row.c[6]?.v || '',
+      observation: row.c[7]?.v || '',
+      location: row.c[8]?.v || '',
+    }));
+
+    return data;
+  } catch(e) {
+    console.error('시트 로드 실패:', e);
+    return sampleData; // 실패 시 샘플 데이터 사용
+  }
+}
+
+// 페이지 로드 시 시트에서 데이터 가져오기
+// loadFromSheet().then(data => { ... });
+*/
+</script>
+</body>
+</html>
