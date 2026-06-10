@@ -406,7 +406,7 @@ body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
 </div>
 
 <div id="guide-panel" class="panel">
-  <a href="#" class="form-btn" onclick="alert('구글 폼 URL을 여기에 연결하세요')">📝 이번 차시 과제 제출하기</a>
+  <a href="form.html" class="form-btn">📝 이번 차시 과제 제출하기</a>
 
   <h3 style="font-size:14px; color:#1b4332; margin-bottom:12px;">제출 방법 안내</h3>
 
@@ -545,6 +545,10 @@ const sampleData = [
   }
 ];
 
+// === Apps Script API URL ===
+const API_URL = 'https://script.google.com/macros/s/AKfycbz8xZqUCHUK2ZLQ79Lgz78lLnPZR8CwDCm7ORiAqEz9TeJ_xOs8NBJ7PXJicvrPYixp/exec';
+let liveData = null;
+
 // === 관리자 모드 ===
 let isAdmin = false;
 const ADMIN_PW = '1520';
@@ -603,7 +607,8 @@ function restoreAll() {
 }
 
 function getActiveData() {
-  return sampleData.filter(d => !deletedIds.includes(d.id));
+  const data = liveData || sampleData;
+  return data.filter(d => !deletedIds.includes(d.id));
 }
 
 function updateStats() {
@@ -755,41 +760,38 @@ function showTab(name) {
   }
 }
 
-// === 구글 시트 연동 (실제 사용 시 활성화) ===
-/*
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/gviz/tq?tqx=out:json';
-
-async function loadFromSheet() {
+// === Google Sheets → Apps Script API 연동 ===
+async function loadFromAPI() {
   try {
-    const res = await fetch(SHEET_URL);
-    const text = await res.text();
-    // Google Sheets JSON 응답에서 데이터 파싱
-    const json = JSON.parse(text.substring(47).slice(0, -2));
-    const rows = json.table.rows;
-
-    const data = rows.map((row, i) => ({
-      id: i + 1,
-      session: parseInt(row.c[0]?.v) || 1,
-      student: row.c[1]?.v || '',
-      date: row.c[2]?.v || '',
-      lat: parseFloat(row.c[3]?.v) || 0,
-      lng: parseFloat(row.c[4]?.v) || 0,
-      species: row.c[5]?.v || '',
-      scientificName: row.c[6]?.v || '',
-      observation: row.c[7]?.v || '',
-      location: row.c[8]?.v || '',
-    }));
-
-    return data;
+    const res = await fetch(API_URL);
+    const json = await res.json();
+    if (json.status === "ok" && json.data && json.data.length > 0) {
+      liveData = json.data.map((d, i) => ({
+        id: 1000 + i,
+        session: parseInt(d.session) || 0,
+        student: d.observer || "",
+        date: d.date || "",
+        lat: d.lat,
+        lng: d.lng,
+        species: d.species || "",
+        scientificName: d.scientificName || "",
+        observation: d.observation || "",
+        location: d.location || ""
+      }));
+      deletedIds = JSON.parse(localStorage.getItem("greenmap_deleted") || "[]");
+      refreshMarkers();
+      updateStats();
+      renderList();
+      renderSpecies();
+      console.log("API에서 " + liveData.length + "개 데이터 로드 완료");
+    }
   } catch(e) {
-    console.error('시트 로드 실패:', e);
-    return sampleData; // 실패 시 샘플 데이터 사용
+    console.error("API 로드 실패, 샘플 데이터 사용:", e);
   }
 }
 
-// 페이지 로드 시 시트에서 데이터 가져오기
-// loadFromSheet().then(data => { ... });
-*/
+// 페이지 로드 시 API에서 데이터 가져오기
+loadFromAPI();
 </script>
 </body>
 </html>
