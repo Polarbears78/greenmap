@@ -3,74 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🌿 그린맵 관찰 기록 - 육민관중학교</title>
+<title>ð ê·¸ë¦°ë§µ ê´ì°° ê¸°ë¡ ì ì¶</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #f0f4f0;
-  min-height: 100vh;
-}
+body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f4f0; min-height: 100vh; }
 
-/* Header */
 .header {
   background: linear-gradient(135deg, #2d6a4f, #40916c);
   color: white;
-  padding: 14px 16px;
+  padding: 16px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 .header h1 { font-size: 18px; font-weight: 700; }
-.header .subtitle { font-size: 11px; opacity: 0.85; margin-top: 3px; }
+.header .subtitle { font-size: 12px; opacity: 0.85; margin-top: 4px; }
 
-/* Main */
-.container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 16px;
-}
+.container { max-width: 500px; margin: 0 auto; padding: 16px; }
 
-/* GPS Banner */
-.gps-banner {
+/* Photo guide section */
+.photo-guide {
   background: white;
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  border-left: 4px solid #40916c;
-}
-.gps-banner.error { border-left-color: #e63946; }
-.gps-banner .gps-icon { font-size: 22px; }
-.gps-banner .gps-text { flex: 1; }
-.gps-banner .gps-label { font-size: 11px; color: #888; }
-.gps-banner .gps-coords { font-size: 13px; font-weight: 600; color: #1b4332; margin-top: 2px; }
-.gps-banner .gps-status { font-size: 12px; color: #40916c; }
-.gps-banner.error .gps-status { color: #e63946; }
-.gps-refresh {
-  background: #e8f0e8;
-  border: none;
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* Form sections */
-.form-section {
-  background: white;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 16px;
   margin-bottom: 16px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
-.form-section-title {
-  font-size: 14px;
+.photo-guide h2 {
+  font-size: 15px;
   font-weight: 700;
   color: #1b4332;
   margin-bottom: 12px;
@@ -78,87 +37,188 @@ body {
   align-items: center;
   gap: 6px;
 }
-
-/* Input fields */
-.field { margin-bottom: 14px; }
-.field:last-child { margin-bottom: 0; }
-.field label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: #555;
-  margin-bottom: 5px;
-}
-.field label .required { color: #e63946; margin-left: 2px; }
-.field input, .field select, .field textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1.5px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
-  background: #fafafa;
-  transition: border-color 0.2s;
-}
-.field input:focus, .field select:focus, .field textarea:focus {
-  outline: none;
-  border-color: #40916c;
-  background: white;
-}
-.field textarea { resize: vertical; min-height: 80px; }
-.field .hint { font-size: 11px; color: #999; margin-top: 3px; }
-
-/* Photo upload */
-.photo-grid {
+.photo-examples {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
+  margin-bottom: 12px;
 }
-.photo-box {
-  position: relative;
-  aspect-ratio: 1;
-  background: #f0f4f0;
-  border: 2px dashed #ccc;
+.photo-example {
   border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #d8f3dc;
+}
+.photo-example .photo-placeholder {
+  width: 100%;
+  height: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-size: 36px;
+  position: relative;
+}
+.photo-example .photo-placeholder .bg-icon {
+  font-size: 48px;
+  margin-bottom: 4px;
+}
+.photo-example .photo-label {
+  background: #2d6a4f;
+  color: white;
+  text-align: center;
+  padding: 6px 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.photo-example:nth-child(1) .photo-placeholder { background: linear-gradient(135deg, #d8f3dc, #b7e4c7); }
+.photo-example:nth-child(2) .photo-placeholder { background: linear-gradient(135deg, #b7e4c7, #95d5b2); }
+.photo-example:nth-child(3) .photo-placeholder { background: linear-gradient(135deg, #95d5b2, #74c69d); }
+.photo-tip {
+  background: #f0f7f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #2d6a4f;
+  line-height: 1.6;
+}
+.photo-tip strong { color: #1b4332; }
+
+/* Form section */
+.form-section {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.form-section h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1b4332;
+  margin-bottom: 14px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+.form-group label .required {
+  color: #e63946;
+  margin-left: 2px;
+}
+.form-group label .optional {
+  color: #999;
+  font-weight: 400;
+  font-size: 11px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fafafa;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #40916c;
+  background: white;
+}
+.form-group textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+.form-group .hint {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.gps-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: end;
+}
+.gps-btn {
+  padding: 10px 12px;
+  background: #40916c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.gps-btn:active { transform: scale(0.97); }
+.gps-status {
+  font-size: 11px;
+  color: #40916c;
+  margin-top: 4px;
+  grid-column: 1 / -1;
+}
+
+/* Photo upload */
+.photo-upload-area {
+  border: 2px dashed #c8e6c9;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
   cursor: pointer;
   transition: all 0.2s;
-  overflow: hidden;
+  background: #f8fdf8;
 }
-.photo-box:hover { border-color: #40916c; background: #e8f0e8; }
-.photo-box.filled { border-style: solid; border-color: #40916c; }
-.photo-box .photo-icon { font-size: 28px; margin-bottom: 4px; }
-.photo-box .photo-label { font-size: 10px; color: #888; text-align: center; line-height: 1.3; }
-.photo-box .photo-required { font-size: 9px; color: #e63946; margin-top: 2px; }
-.photo-box img {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+.photo-upload-area:hover { border-color: #40916c; background: #f0f7f0; }
+.photo-upload-area .upload-icon { font-size: 32px; margin-bottom: 6px; }
+.photo-upload-area .upload-text { font-size: 13px; color: #666; }
+.photo-upload-area .upload-hint { font-size: 11px; color: #999; margin-top: 4px; }
+.photo-preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.photo-preview {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+.photo-preview img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
-.photo-box .photo-remove {
+.photo-preview .remove-btn {
   position: absolute;
-  top: 4px; right: 4px;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
   background: rgba(0,0,0,0.6);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 22px; height: 22px;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
 }
-.photo-box.filled .photo-remove { display: flex; }
-.photo-box input[type="file"] { display: none; }
 
 /* Submit button */
 .submit-btn {
+  display: block;
   width: 100%;
   padding: 14px;
   background: linear-gradient(135deg, #2d6a4f, #40916c);
@@ -168,437 +228,278 @@ body {
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.1s, opacity 0.2s;
-  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(45,106,79,0.3);
+  transition: transform 0.1s;
 }
 .submit-btn:active { transform: scale(0.98); }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.submit-btn:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
 
-/* Progress overlay */
-.overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 999;
-  align-items: center;
-  justify-content: center;
-}
-.overlay.active { display: flex; }
-.overlay-box {
-  background: white;
-  border-radius: 16px;
-  padding: 32px 24px;
+.back-link {
+  display: block;
   text-align: center;
-  max-width: 300px;
-  width: 90%;
+  color: #40916c;
+  font-size: 13px;
+  padding: 12px;
+  text-decoration: none;
+  font-weight: 600;
 }
-.overlay-box .spinner {
-  width: 40px; height: 40px;
-  border: 4px solid #e8f0e8;
-  border-top: 4px solid #40916c;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 16px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.overlay-box .overlay-msg { font-size: 14px; color: #333; line-height: 1.5; }
 
 /* Success message */
-.success-box {
+.success-msg {
   display: none;
-  text-align: center;
-  padding: 40px 20px;
-}
-.success-box .success-icon { font-size: 60px; margin-bottom: 16px; }
-.success-box h2 { font-size: 20px; color: #1b4332; margin-bottom: 8px; }
-.success-box p { font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.6; }
-.success-box .btn-again {
-  display: inline-block;
-  padding: 12px 24px;
-  background: #40916c;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-}
-.success-box .btn-map {
-  display: inline-block;
-  padding: 12px 24px;
   background: white;
-  color: #40916c;
-  border: 1.5px solid #40916c;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  margin-left: 8px;
-}
-
-/* Footer */
-.footer {
+  border-radius: 14px;
+  padding: 32px 16px;
   text-align: center;
-  padding: 12px;
-  font-size: 11px;
-  color: #999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 16px;
 }
-.footer a { color: #40916c; text-decoration: none; }
+.success-msg .check { font-size: 48px; margin-bottom: 12px; }
+.success-msg h2 { color: #1b4332; font-size: 18px; margin-bottom: 8px; }
+.success-msg p { color: #666; font-size: 13px; line-height: 1.6; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>🌿 그린맵 관찰 기록</h1>
-  <div class="subtitle">육민관중학교 STEAM 동아리</div>
+  <h1>ð ê´ì°° ê¸°ë¡ ì ì¶</h1>
+  <div class="subtitle">ê·¸ë¦°ë§µ GreenMap - ì¡ë¯¼ê´ì¤íêµ STEAM ëìë¦¬</div>
 </div>
 
 <div class="container">
 
-  <!-- GPS 위치 -->
-  <div class="gps-banner" id="gpsBanner">
-    <div class="gps-icon">📍</div>
-    <div class="gps-text">
-      <div class="gps-label">현재 GPS 위치</div>
-      <div class="gps-coords" id="gpsCoords">위치 확인 중...</div>
-      <div class="gps-status" id="gpsStatus">GPS 신호를 찾고 있습니다</div>
-    </div>
-    <button class="gps-refresh" onclick="getGPS()" title="위치 새로고침">🔄</button>
-  </div>
-
-  <!-- 입력 폼 -->
-  <form id="obsForm" onsubmit="return handleSubmit(event)">
-
-    <!-- 기본 정보 -->
-    <div class="form-section">
-      <div class="form-section-title">📋 기본 정보</div>
-      <div class="field">
-        <label>차시<span class="required">*</span></label>
-        <select id="session" required>
-          <option value="">선택하세요</option>
-          <option value="1">1차시</option>
-          <option value="2">2차시</option>
-          <option value="3">3차시</option>
-          <option value="4">4차시</option>
-          <option value="5">5차시</option>
-          <option value="6">6차시</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>이름<span class="required">*</span></label>
-        <input type="text" id="studentName" placeholder="홍길동" required>
-      </div>
-      <div class="field">
-        <label>관찰 날짜<span class="required">*</span></label>
-        <input type="date" id="obsDate" required>
-      </div>
-    </div>
-
-    <!-- 사진 촬영 -->
-    <div class="form-section">
-      <div class="form-section-title">📸 식물 사진 (3장 필수)</div>
-      <div class="photo-grid">
-        <div class="photo-box" id="photoBox1" onclick="document.getElementById('photo1').click()">
-          <div class="photo-icon">🌳</div>
-          <div class="photo-label">전체 모습</div>
-          <div class="photo-required">필수</div>
-          <input type="file" id="photo1" accept="image/*" capture="environment" onchange="previewPhoto(this, 'photoBox1')">
-          <button type="button" class="photo-remove" onclick="removePhoto(event, 'photo1', 'photoBox1')">✕</button>
+  <!-- Photo guide -->
+  <div class="photo-guide">
+    <h2>ð¸ ì´ë ê² ì°ì´ì£¼ì¸ì! (3ì¥)</h2>
+    <div class="photo-examples">
+      <div class="photo-example">
+        <div class="photo-placeholder">
+          <span class="bg-icon">ð³</span>
+          <span style="font-size:11px; color:#2d6a4f;">ì ì²´</span>
         </div>
-        <div class="photo-box" id="photoBox2" onclick="document.getElementById('photo2').click()">
-          <div class="photo-icon">🍃</div>
-          <div class="photo-label">잎 클로즈업</div>
-          <div class="photo-required">필수</div>
-          <input type="file" id="photo2" accept="image/*" capture="environment" onchange="previewPhoto(this, 'photoBox2')">
-          <button type="button" class="photo-remove" onclick="removePhoto(event, 'photo2', 'photoBox2')">✕</button>
-        </div>
-        <div class="photo-box" id="photoBox3" onclick="document.getElementById('photo3').click()">
-          <div class="photo-icon">🌸</div>
-          <div class="photo-label">꽃/열매/기타</div>
-          <div class="photo-required">필수</div>
-          <input type="file" id="photo3" accept="image/*" capture="environment" onchange="previewPhoto(this, 'photoBox3')">
-          <button type="button" class="photo-remove" onclick="removePhoto(event, 'photo3', 'photoBox3')">✕</button>
-        </div>
+        <div class="photo-label">â  ì ì²´ ëª¨ìµ</div>
       </div>
-      <div class="hint" style="margin-top: 8px;">탭하면 카메라가 열립니다. 선명하게 촬영해주세요.</div>
-    </div>
-
-    <!-- 관찰 기록 -->
-    <div class="form-section">
-      <div class="form-section-title">📝 관찰 기록</div>
-      <div class="field">
-        <label>식물 특징 메모<span class="required">*</span></label>
-        <textarea id="observation" placeholder="예: 높이 약 1m, 잎은 타원형이고 가장자리에 톱니가 있음. 꽃은 분홍색, 5장의 꽃잎. 줄기에 가시가 있음." required></textarea>
-        <div class="hint">잎 모양, 꽃 색깔, 높이, 줄기 특징 등을 자세히 적어주세요</div>
+      <div class="photo-example">
+        <div class="photo-placeholder">
+          <span class="bg-icon">ð</span>
+          <span style="font-size:11px; color:#2d6a4f;">ê°ê¹ì´</span>
+        </div>
+        <div class="photo-label">â¡ ì í´ë¡ì¦ì</div>
       </div>
-      <div class="field">
-        <label>위치 설명<span class="required">*</span></label>
-        <input type="text" id="location" placeholder="예: 학교 정문 화단, 운동장 남쪽 담장 옆" required>
-        <div class="hint">다른 사람이 찾을 수 있도록 구체적으로</div>
+      <div class="photo-example">
+        <div class="photo-placeholder">
+          <span class="bg-icon">ð¸</span>
+          <span style="font-size:11px; color:#2d6a4f;">í¹ì§</span>
+        </div>
+        <div class="photo-label">â¢ ê½/ì´ë§¤/ìí¼</div>
       </div>
     </div>
-
-    <!-- 제출 -->
-    <button type="submit" class="submit-btn" id="submitBtn">🌿 관찰 기록 제출하기</button>
-
-  </form>
-
-  <!-- 제출 완료 -->
-  <div class="success-box" id="successBox">
-    <div class="success-icon">🎉</div>
-    <h2>기록 완료!</h2>
-    <p>관찰 데이터가 저장되었습니다.<br>그린맵에서 내 기록을 확인해보세요.</p>
-    <button class="btn-again" onclick="resetForm()">📝 추가 기록하기</button>
-    <a class="btn-map" href="live.html">🗺️ 지도 보기</a>
+    <div class="photo-tip">
+      <strong>ì´¬ì í:</strong> ìë¬¼ì <strong>ì ì²´ ëª¨ìµ</strong>(í¬ê¸° ë¹êµ ê°ë¥íê²), <strong>ìì ìÂ·ë·ë©´</strong>(ìë§¥, í¸ ì ë¬´ íì¸), <strong>ê½ì´ë ì´ë§¤, ìí¼ ë± í¹ì§</strong>ì ê°ê° ì°ì´ì£¼ì¸ì. íë¤ë¦¬ì§ ìê² ê°ê¹ì´ìì ì ëªíê² ì´¬ìíì¸ì!
+    </div>
   </div>
 
-  <div class="footer">
-    2026 육민관중학교 STEAM 동아리 그린맵 |
-    <a href="live.html">실시간 지도</a> |
-    <a href="index.html">예시 페이지</a>
+  <!-- Form -->
+  <div class="form-section" id="formSection">
+    <h2>ð¿ ê´ì°° ê¸°ë¡ ìë ¥</h2>
+
+    <div class="form-group">
+      <label>ì°¨ì <span class="required">*</span></label>
+      <select id="session">
+        <option value="">ì°¨ìë¥¼ ì ííì¸ì</option>
+        <option value="1">1ì°¨ì â íêµ ì£¼ë³ ìì ì¡°ì¬</option>
+        <option value="2">2ì°¨ì â í ìÂ·ìì§ íê²½ ì¸¡ì </option>
+        <option value="3">3ì°¨ì â ìí ì§ë ë°ì´í° ìë ¥</option>
+        <option value="4">4ì°¨ì â ì¸ëì¢Â·ììì¢ ë¶ë¥</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>ì´ë¦ <span class="required">*</span></label>
+      <input type="text" id="studentName" placeholder="ì: ê¹ââ">
+    </div>
+
+    <div class="form-group">
+      <label>ìë¬¼ëª <span class="required">*</span></label>
+      <input type="text" id="speciesName" placeholder="ì: ìëë¬´, ì² ì­, ê°ìì§í">
+    </div>
+
+    <div class="form-group">
+      <label>íëª <span class="optional">(ì í)</span></label>
+      <input type="text" id="scientificName" placeholder="ì: Pinus densiflora" style="font-style:italic;">
+      <div class="hint">ëª¨ë¥´ë©´ ë¹ìëì¸ì. ëì¤ì í¨ê» ì°¾ìë´ëë¤.</div>
+    </div>
+
+    <div class="form-group">
+      <label>ê´ì°° ìì¹ <span class="required">*</span></label>
+      <input type="text" id="locationDesc" placeholder="ì: íêµ ì ë¬¸ íë¨, ì´ëì¥ ë¨ìª½ ë´ì¥ ì">
+    </div>
+
+    <div class="form-group">
+      <label>GPS ì¢í</label>
+      <div class="gps-row">
+        <input type="text" id="lat" placeholder="ìë" readonly>
+        <input type="text" id="lng" placeholder="ê²½ë" readonly>
+        <button class="gps-btn" onclick="getGPS()">ð íì¬ìì¹</button>
+      </div>
+      <div class="gps-status" id="gpsStatus"></div>
+      <div class="hint">íì¥ìì [íì¬ìì¹] ë²í¼ì ëë¬ì£¼ì¸ì.</div>
+    </div>
+
+    <div class="form-group">
+      <label>ê´ì°° ë´ì© <span class="required">*</span></label>
+      <textarea id="observation" placeholder="ëì´, ì, ì ëª¨ì, ê½ ìí, ì£¼ë³ íê²½ ë±ì ìì¸í ì ì´ì£¼ì¸ì.&#10;&#10;ì: ëì´ ì½ 1.5m, ìì íìíì´ê³  ëì´ ë¾°ì¡±í¨. ë¶íì ê½ì´ ë§ê° ìí. íë¨ ê°ì¥ìë¦¬ì 3ê·¸ë£¨ê° ëëí ìì."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>ð· ì¬ì§ (3ì¥ ì°ì´ì£¼ì¸ì!) <span class="required">*</span></label>
+      <div class="photo-upload-area" onclick="document.getElementById('photoInput').click()">
+        <div class="upload-icon">ð·</div>
+        <div class="upload-text">í­íì¬ ì¬ì§ ì¶ê°</div>
+        <div class="upload-hint">ì ê°ì´ëì²ë¼ ì ì²´Â·ìÂ·í¹ì§ 3ì¥ì ì°ì´ì£¼ì¸ì</div>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" multiple capture="environment" style="display:none" onchange="handlePhotos(this)">
+      <div class="photo-preview-grid" id="photoPreview"></div>
+    </div>
+
+    <button class="submit-btn" onclick="submitForm()">â ê´ì°° ê¸°ë¡ ì ì¶</button>
   </div>
 
-</div>
-
-<!-- 전송 중 오버레이 -->
-<div class="overlay" id="overlay">
-  <div class="overlay-box">
-    <div class="spinner"></div>
-    <div class="overlay-msg" id="overlayMsg">사진을 업로드하고 있습니다...</div>
+  <!-- Success message -->
+  <div class="success-msg" id="successMsg">
+    <div class="check">â</div>
+    <h2>ì ì¶ ìë£!</h2>
+    <p>ê´ì°° ê¸°ë¡ì´ ì±ê³µì ì¼ë¡ ì ì¶ëììµëë¤.<br>ì§ë í­ìì ë´ ê¸°ë¡ì íì¸í´ë³´ì¸ì.</p>
+    <br>
+    <a href="index.html" class="submit-btn" style="text-decoration:none; display:inline-block; width:auto; padding:12px 32px;">ðºï¸ ì§ëìì íì¸íê¸°</a>
+    <br><br>
+    <button onclick="resetForm()" style="background:none; border:2px solid #40916c; color:#40916c; padding:10px 24px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">ð ì ê¸°ë¡ ìì±</button>
   </div>
+
+  <a href="index.html" class="back-link">â ê·¸ë¦°ë§µì¼ë¡ ëìê°ê¸°</a>
 </div>
 
 <script>
-// ===== 설정 =====
-// Google Apps Script 웹앱 URL (배포 후 여기에 입력)
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgo52WZnz-XmvGnD2Q0cnOQ_GiX2acgtey0YYNYxvqhIPju3lP40GOSb6rHwhP3dMx8g/exec';
+// Photo handling
+let photos = [];
 
-// ===== GPS 자동 입력 =====
-let currentLat = null;
-let currentLng = null;
-
-function getGPS() {
-  const banner = document.getElementById('gpsBanner');
-  const coords = document.getElementById('gpsCoords');
-  const status = document.getElementById('gpsStatus');
-
-  banner.classList.remove('error');
-  coords.textContent = '위치 확인 중...';
-  status.textContent = 'GPS 신호를 찾고 있습니다';
-
-  if (!navigator.geolocation) {
-    banner.classList.add('error');
-    coords.textContent = 'GPS 미지원';
-    status.textContent = '이 기기는 GPS를 지원하지 않습니다';
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      currentLat = pos.coords.latitude;
-      currentLng = pos.coords.longitude;
-      coords.textContent = currentLat.toFixed(4) + ', ' + currentLng.toFixed(4);
-      status.textContent = '✅ 위치 확인 완료 (정확도: ' + Math.round(pos.coords.accuracy) + 'm)';
-    },
-    (err) => {
-      banner.classList.add('error');
-      if (err.code === 1) {
-        coords.textContent = '위치 권한 필요';
-        status.textContent = '브라우저 설정에서 위치 권한을 허용해주세요';
-      } else if (err.code === 2) {
-        coords.textContent = '위치 확인 실패';
-        status.textContent = '실외에서 다시 시도해주세요';
-      } else {
-        coords.textContent = '시간 초과';
-        status.textContent = '🔄 버튼을 눌러 다시 시도해주세요';
-      }
-    },
-    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-  );
-}
-
-// 페이지 로드 시 GPS 자동 요청
-getGPS();
-
-// 오늘 날짜 자동 입력
-document.getElementById('obsDate').value = new Date().toISOString().split('T')[0];
-
-// ===== 사진 미리보기 =====
-function previewPhoto(input, boxId) {
-  const box = document.getElementById(boxId);
-  if (input.files && input.files[0]) {
+function handlePhotos(input) {
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    if (photos.length >= 5) return;
     const reader = new FileReader();
-    reader.onload = function(e) {
-      // 기존 미리보기 제거
-      const existing = box.querySelector('img');
-      if (existing) existing.remove();
-      // 새 미리보기
-      const img = document.createElement('img');
-      img.src = e.target.result;
-      box.appendChild(img);
-      box.classList.add('filled');
+    reader.onload = e => {
+      photos.push({ name: file.name, data: e.target.result });
+      renderPhotoPreviews();
     };
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-function removePhoto(event, inputId, boxId) {
-  event.stopPropagation();
-  const box = document.getElementById(boxId);
-  const input = document.getElementById(inputId);
-  input.value = '';
-  const img = box.querySelector('img');
-  if (img) img.remove();
-  box.classList.remove('filled');
-}
-
-// ===== 파일을 Base64로 변환 =====
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      // data:image/jpeg;base64,xxxx 에서 base64 부분만 추출
-      const base64 = reader.result.split(',')[1];
-      resolve(base64);
-    };
-    reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
 
-// ===== 이미지 리사이즈 (최대 1200px, 품질 0.8) =====
-function resizeImage(file, maxSize) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    img.onload = () => {
-      let w = img.width;
-      let h = img.height;
-      if (w > maxSize || h > maxSize) {
-        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
-        else { w = Math.round(w * maxSize / h); h = maxSize; }
-      }
-      canvas.width = w;
-      canvas.height = h;
-      ctx.drawImage(img, 0, 0, w, h);
-      canvas.toBlob((blob) => {
-        resolve(blob);
-      }, 'image/jpeg', 0.8);
-    };
-    img.src = URL.createObjectURL(file);
-  });
+function renderPhotoPreviews() {
+  const grid = document.getElementById('photoPreview');
+  grid.innerHTML = photos.map((p, i) => `
+    <div class="photo-preview">
+      <img src="${p.data}" alt="ì¬ì§ ${i+1}">
+      <button class="remove-btn" onclick="removePhoto(${i})">â</button>
+    </div>
+  `).join('');
 }
 
-// ===== 폼 제출 =====
-async function handleSubmit(e) {
-  e.preventDefault();
+function removePhoto(idx) {
+  photos.splice(idx, 1);
+  renderPhotoPreviews();
+}
 
-  // 유효성 검사
-  const photo1 = document.getElementById('photo1').files[0];
-  const photo2 = document.getElementById('photo2').files[0];
-  const photo3 = document.getElementById('photo3').files[0];
+// GPS
+function getGPS() {
+  const status = document.getElementById('gpsStatus');
+  status.textContent = 'ð¡ ìì¹ íì¸ ì¤...';
 
-  if (!photo1 || !photo2 || !photo3) {
-    alert('사진 3장을 모두 촬영해주세요.');
-    return false;
+  if (!navigator.geolocation) {
+    status.textContent = 'â ï¸ ì´ ê¸°ê¸°ìì GPSë¥¼ ì§ìíì§ ììµëë¤.';
+    return;
   }
 
-  if (currentLat === null || currentLng === null) {
-    alert('GPS 위치가 아직 확인되지 않았습니다.\n실외에서 🔄 버튼을 눌러 위치를 다시 확인해주세요.');
-    return false;
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      document.getElementById('lat').value = pos.coords.latitude.toFixed(6);
+      document.getElementById('lng').value = pos.coords.longitude.toFixed(6);
+      status.textContent = 'â ìì¹ íì¸ ìë£ (ì íë: ' + Math.round(pos.coords.accuracy) + 'm)';
+      status.style.color = '#2d6a4f';
+    },
+    err => {
+      status.textContent = 'â ï¸ ìì¹ë¥¼ ê°ì ¸ì¬ ì ììµëë¤. ì¤ì ìì ìì¹ ê¶íì íì©í´ì£¼ì¸ì.';
+      status.style.color = '#e63946';
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+}
+
+// Form submission
+function submitForm() {
+  const session = document.getElementById('session').value;
+  const name = document.getElementById('studentName').value.trim();
+  const species = document.getElementById('speciesName').value.trim();
+  const observation = document.getElementById('observation').value.trim();
+  const location = document.getElementById('locationDesc').value.trim();
+
+  // Validation
+  const missing = [];
+  if (!session) missing.push('ì°¨ì');
+  if (!name) missing.push('ì´ë¦');
+  if (!species) missing.push('ìë¬¼ëª');
+  if (!observation) missing.push('ê´ì°° ë´ì©');
+  if (!location) missing.push('ê´ì°° ìì¹');
+  if (photos.length === 0) missing.push('ì¬ì§');
+
+  if (missing.length > 0) {
+    alert('ë¤ì í­ëª©ì ìë ¥í´ì£¼ì¸ì:\nâ¢ ' + missing.join('\nâ¢ '));
+    return;
   }
 
-  if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
-    alert('⚠️ Google Apps Script URL이 설정되지 않았습니다.\n선생님에게 알려주세요.');
-    return false;
-  }
+  // Collect data
+  const formData = {
+    session: parseInt(session),
+    student: name,
+    species: species,
+    scientificName: document.getElementById('scientificName').value.trim(),
+    lat: document.getElementById('lat').value,
+    lng: document.getElementById('lng').value,
+    observation: observation,
+    location: location,
+    photoCount: photos.length,
+    date: new Date().toISOString().split('T')[0]
+  };
 
-  // UI 잠금
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  const overlay = document.getElementById('overlay');
-  overlay.classList.add('active');
+  // Store in localStorage (can be connected to Google Sheets later)
+  const submissions = JSON.parse(localStorage.getItem('greenmap_submissions') || '[]');
+  submissions.push(formData);
+  localStorage.setItem('greenmap_submissions', JSON.stringify(submissions));
 
-  try {
-    // 사진 리사이즈 + Base64 변환
-    document.getElementById('overlayMsg').textContent = '사진을 압축하고 있습니다...';
-    const resized1 = await resizeImage(photo1, 1200);
-    const resized2 = await resizeImage(photo2, 1200);
-    const resized3 = await resizeImage(photo3, 1200);
-
-    const b64_1 = await fileToBase64(resized1);
-    const b64_2 = await fileToBase64(resized2);
-    const b64_3 = await fileToBase64(resized3);
-
-    // 데이터 준비
-    document.getElementById('overlayMsg').textContent = '데이터를 전송하고 있습니다...';
-    const payload = {
-      session: document.getElementById('session').value,
-      student: document.getElementById('studentName').value.trim(),
-      date: document.getElementById('obsDate').value,
-      lat: currentLat,
-      lng: currentLng,
-      observation: document.getElementById('observation').value.trim(),
-      location: document.getElementById('location').value.trim(),
-      photo1: b64_1,
-      photo2: b64_2,
-      photo3: b64_3
-    };
-
-    // 전송
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
-    });
-
-    // no-cors 모드에서는 응답을 읽을 수 없으므로 성공으로 간주
-    document.getElementById('overlayMsg').textContent = '저장 완료!';
-    setTimeout(() => {
-      overlay.classList.remove('active');
-      document.getElementById('obsForm').style.display = 'none';
-      document.getElementById('gpsBanner').style.display = 'none';
-      document.getElementById('successBox').style.display = 'block';
-    }, 500);
-
-  } catch(err) {
-    overlay.classList.remove('active');
-    btn.disabled = false;
-    alert('전송 중 오류가 발생했습니다.\n다시 시도해주세요.\n\n' + err.message);
-  }
-
-  return false;
+  // Show success
+  document.getElementById('formSection').style.display = 'none';
+  document.querySelector('.photo-guide').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
 }
 
 function resetForm() {
-  document.getElementById('obsForm').style.display = 'block';
-  document.getElementById('gpsBanner').style.display = 'flex';
-  document.getElementById('successBox').style.display = 'none';
-  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('session').value = '';
+  document.getElementById('studentName').value = '';
+  document.getElementById('speciesName').value = '';
+  document.getElementById('scientificName').value = '';
+  document.getElementById('locationDesc').value = '';
+  document.getElementById('lat').value = '';
+  document.getElementById('lng').value = '';
+  document.getElementById('observation').value = '';
+  document.getElementById('gpsStatus').textContent = '';
+  photos = [];
+  renderPhotoPreviews();
+  document.getElementById('photoInput').value = '';
 
-  // 폼 초기화
-  document.getElementById('obsForm').reset();
-  document.getElementById('obsDate').value = new Date().toISOString().split('T')[0];
-
-  // 사진 초기화
-  ['photoBox1','photoBox2','photoBox3'].forEach(id => {
-    const box = document.getElementById(id);
-    const img = box.querySelector('img');
-    if (img) img.remove();
-    box.classList.remove('filled');
-  });
-
-  // GPS 다시 요청
-  getGPS();
-
-  // 상단으로 스크롤
-  window.scrollTo(0, 0);
+  document.getElementById('formSection').style.display = 'block';
+  document.querySelector('.photo-guide').style.display = 'block';
+  document.getElementById('successMsg').style.display = 'none';
 }
 </script>
 </body>
