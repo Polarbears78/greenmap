@@ -220,6 +220,28 @@ body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 12px;
   margin-top: 6px;
 }
+/* 실제 사진 표시 */
+.popup-photos, .card-photos {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.popup-photos img {
+  height: 90px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+.card-photos img {
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  cursor: pointer;
+}
 
 /* Species badge */
 .species-badge {
@@ -549,6 +571,43 @@ const sampleData = [
 const API_URL = 'https://script.google.com/macros/s/AKfycbz8xZqUCHUK2ZLQ79Lgz78lLnPZR8CwDCm7ORiAqEz9TeJ_xOs8NBJ7PXJicvrPYixp/exec';
 let liveData = null;
 
+// === 사진 표시 유틸 ===
+// 다양한 형태(드라이브 링크/ID, 일반 URL, base64)를 <img>에 쓸 수 있는 주소로 변환
+function toImageUrl(v) {
+  if (!v) return null;
+  v = String(v).trim();
+  if (!v) return null;
+  if (v.indexOf('data:') === 0) return v;                // base64 data URL
+  var id = v.match(/[-\w]{25,}/);                         // 구글 드라이브 파일 ID
+  if (v.indexOf('drive.google') !== -1 && id) {
+    return 'https://drive.google.com/thumbnail?id=' + id[0] + '&sz=w1000';
+  }
+  if (/^[-\w]{25,}$/.test(v)) {                           // 순수 파일 ID
+    return 'https://drive.google.com/thumbnail?id=' + v + '&sz=w1000';
+  }
+  if (/^https?:\/\//.test(v)) return v;                   // 일반 이미지 URL
+  return null;
+}
+// 레코드에서 사진 주소 배열 추출 (서버 응답 필드명이 무엇이든 최대한 대응)
+function extractPhotos(d) {
+  var out = [];
+  function add(v) { var u = toImageUrl(v); if (u && out.indexOf(u) === -1) out.push(u); }
+  function fromAny(val) {
+    if (!val) return;
+    if (Array.isArray(val)) val.forEach(function(p) { add(typeof p === 'string' ? p : (p && (p.url || p.link || p.data || p.src))); });
+    else if (typeof val === 'string') val.split(/[,\n|]/).forEach(add);
+  }
+  fromAny(d.photos); fromAny(d.photoUrls); fromAny(d.photoUrl); fromAny(d.images);
+  ['photo', 'photo1', 'photo2', 'photo3', 'image', 'imageUrl'].forEach(function(k) { add(d[k]); });
+  return out;
+}
+function photosHtml(photos, cls) {
+  if (!photos || !photos.length) return '';
+  return '<div class="' + cls + '">' + photos.map(function(u) {
+    return '<img src="' + u + '" loading="lazy" onclick="event.stopPropagation();window.open(\'' + u + '\',\'_blank\')" onerror="this.style.display=\'none\'">';
+  }).join('') + '</div>';
+}
+
 // === 관리자 모드 ===
 let isAdmin = false;
 const ADMIN_PW = '1520';
@@ -677,7 +736,7 @@ function refreshMarkers() {
         <div class="popup-meta"><i>${d.scientificName}</i></div>
         <div class="popup-meta">📍 ${d.location} | 🧑‍🎓 ${d.student} | ${d.session}차시</div>
         <div class="popup-body">${d.observation}</div>
-        <div class="popup-photo-placeholder">📷 사진 (구글 폼 연동 시 표시)</div>
+        ${(d.photos && d.photos.length) ? photosHtml(d.photos, 'popup-photos') : '<div class="popup-photo-placeholder">📷 사진 없음</div>'}
         ${deleteBtn}
       `, { maxWidth: 280 });
     markers.push(marker);
@@ -718,6 +777,7 @@ function renderList() {
       </div>
       <div class="card-meta">📍 ${d.location} | 🧑‍🎓 ${d.student} | 📅 ${d.date}</div>
       <div class="card-body">${d.observation}</div>
+      ${photosHtml(d.photos, 'card-photos')}
       ${isAdmin ? `<button class="popup-delete-btn" onclick="event.stopPropagation(); deleteMarker(${d.id})">🗑️ 삭제</button>` : ''}
     </div>
   `).join('');
@@ -776,7 +836,8 @@ async function loadFromAPI() {
         species: d.species || "",
         scientificName: d.scientificName || "",
         observation: d.observation || "",
-        location: d.location || ""
+        location: d.location || "",
+        photos: extractPhotos(d)
       }));
       deletedIds = JSON.parse(localStorage.getItem("greenmap_deleted") || "[]");
       refreshMarkers();
