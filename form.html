@@ -207,7 +207,7 @@ body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
         <input type="file" id="fileInput2" accept="image/*" onchange="handleFile(this,2)">
       </div>
     </div>
-    <div class="hint">각 사진 5MB 이하 · 터치하면 저장된 사진 선택 또는 카메라 촬영</div>
+    <div class="hint">각 사진 20MB 이하 · 터치하면 저장된 사진 선택 또는 카메라 촬영</div>
   </div>
 
   <button class="submit-btn" id="submitBtn" onclick="submitForm()">📤 관찰 기록 제출</button>
@@ -292,8 +292,8 @@ function handleFile(input, idx) {
   var file = input.files[0];
   if (!file) return;
 
-  if (file.size > 5 * 1024 * 1024) {
-    alert('사진 ' + (idx + 1) + ': 5MB 이하 파일만 업로드 가능합니다.');
+  if (file.size > 20 * 1024 * 1024) {
+    alert('사진 ' + (idx + 1) + ': 20MB 이하 파일만 업로드 가능합니다.');
     input.value = '';
     return;
   }
