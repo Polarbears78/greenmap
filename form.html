@@ -184,7 +184,7 @@ body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
         </div>
         <img class="slot-preview" id="preview0">
         <button class="remove-btn" onclick="removePhoto(event,0)">✕</button>
-        <input type="file" id="fileInput0" accept="image/*" capture="environment" onchange="handleFile(this,0)">
+        <input type="file" id="fileInput0" accept="image/*" onchange="handleFile(this,0)">
       </div>
       <div class="photo-slot" id="slot1" onclick="triggerUpload(1)">
         <div class="slot-placeholder">
@@ -194,7 +194,7 @@ body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
         </div>
         <img class="slot-preview" id="preview1">
         <button class="remove-btn" onclick="removePhoto(event,1)">✕</button>
-        <input type="file" id="fileInput1" accept="image/*" capture="environment" onchange="handleFile(this,1)">
+        <input type="file" id="fileInput1" accept="image/*" onchange="handleFile(this,1)">
       </div>
       <div class="photo-slot" id="slot2" onclick="triggerUpload(2)">
         <div class="slot-placeholder">
@@ -204,10 +204,10 @@ body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
         </div>
         <img class="slot-preview" id="preview2">
         <button class="remove-btn" onclick="removePhoto(event,2)">✕</button>
-        <input type="file" id="fileInput2" accept="image/*" capture="environment" onchange="handleFile(this,2)">
+        <input type="file" id="fileInput2" accept="image/*" onchange="handleFile(this,2)">
       </div>
     </div>
-    <div class="hint">각 사진 5MB 이하 · 터치하면 카메라 실행</div>
+    <div class="hint">각 사진 5MB 이하 · 터치하면 저장된 사진 선택 또는 카메라 촬영</div>
   </div>
 
   <button class="submit-btn" id="submitBtn" onclick="submitForm()">📤 관찰 기록 제출</button>
