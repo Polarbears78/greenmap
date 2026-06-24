@@ -29,9 +29,12 @@ var PHOTO_FOLDER = '그린맵_사진';
 // 팝업에서 본인 계정으로 드라이브/시트 접근을 "허용" 하세요.
 // (이 과정을 거치지 않으면 학생 제출 시 'DriveApp 권한 없음' 오류가 납니다.)
 function 권한승인() {
-  getPhotoFolder_();                       // 드라이브 권한 확인/요청
-  SpreadsheetApp.openById(SHEET_ID).getName(); // 시트 권한 확인/요청
-  Logger.log('권한 승인 완료 — 이제 배포 관리에서 "새 버전"으로 재배포하세요.');
+  // 드라이브 '수정(쓰기)' 권한까지 확실히 요청하려면 실제 쓰기 동작을 호출해야 합니다.
+  // (읽기 동작만 호출하면 읽기 권한만 승인되어 사진 저장 시 createFolder 오류가 납니다.)
+  var f = DriveApp.createFolder('그린맵_권한확인_삭제예정');
+  f.setTrashed(true);                          // 테스트용 폴더는 휴지통으로
+  SpreadsheetApp.getActiveSpreadsheet().getName(); // 시트 권한 확인/요청
+  Logger.log('권한 승인 완료 — 이제 학생 제출이 정상 동작합니다.');
 }
 
 // ===== 폼 제출 받기 (form.html → 여기) =====
